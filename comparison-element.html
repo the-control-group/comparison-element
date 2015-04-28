@@ -1,27 +1,17 @@
-<!--
-    @license
-    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-    Code distributed by Google as part of the polymer project is also
-    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <link rel="import" href="../polymer/polymer.html">
-
 <!--
 Element providing solution to no problem in particular.
 
 ##### Example
 
-    <seed-element></seed-element>
+    <comparison-element></comparison-element>
 
-@element seed-element
-@blurb Element providing solution to no problem in particular.
-@status alpha
-@homepage http://polymerlabs.github.io/seed-element
+@element comparison-element
+@blurb Element providing graphical metric comparison.
+@status beta
+@homepage https://github.com/the-control-group/comparison-element
 -->
-<polymer-element name="seed-element" attributes="notitle author">
+<polymer-element name="comparison-element" attributes="notitle author">
 
   <template>
 
@@ -53,7 +43,7 @@ Element providing solution to no problem in particular.
        */
       fancy: false,
 
-      ready: function() {
+      ready: function () {
         // Ready is a lifecycle callback.
         // You can do setup work in here.
         // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
@@ -66,7 +56,7 @@ Element providing solution to no problem in particular.
        * @param {String} greeting Pass in a specific greeting.
        * @return {String} Returns a string greeting.
        */
-      sayHello: function(greeting) {
+      sayHello: function (greeting) {
         var response = greeting || 'Hello World!';
         return 'seed-element says, ' + response;
       },
@@ -86,8 +76,8 @@ Element providing solution to no problem in particular.
        *
        * @method fireLasers
        */
-      fireLasers: function() {
-        this.fire('seed-element-lasers-success', { sound: 'Pew pew pew!' });
+      fireLasers: function () {
+        this.fire('seed-element-lasers-success', {sound: 'Pew pew pew!'});
       }
 
     });

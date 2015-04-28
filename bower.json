@@ -1,15 +1,16 @@
 {
-  "name": "seed-element",
+  "name": "comparison-element",
   "version": "0.0.0",
   "authors": [
-    "Anonymous <anonymous@example.com>"
+    "Darren Labey <darren.labey@thecontrolgroup.com>"
   ],
-  "description": "Element providing solution to no problem in particular.",
+  "description": "Re-usable Polymer 0.5.* comparison element that can be used to display a main metric and compare it agains at least 1 other metric; it is configurable for up to 2 more optional metrics to be compared against.",
   "keywords": [
     "web-component",
     "web-components",
     "polymer",
-    "seed"
+    "comparison",
+    "metric"
   ],
   "main": "seed-element.html",
   "license": "MIT",
