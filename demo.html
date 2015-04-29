@@ -1,17 +1,9 @@
-<!--
-    @license
-    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-    Code distributed by Google as part of the polymer project is also
-    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
+
 <!doctype html>
 <html>
 <head>
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>seed-element Demo</title>
+  <title>comparison-element Demo</title>
 
   <script src="../webcomponentsjs/webcomponents.min.js"></script>
   <script type="text/javascript"
@@ -37,34 +29,37 @@
 
 <p>An example of using <code>&lt;comparison-element&gt;</code>:</p>
 
+
 <comparison-element chart-line-colors='["#fff"]' chart-h-axis-text-style-color="#fff"
                     chart-v-axis-baseline-color="#acacac" chart-v-axis-text-style-color="#fff"
-                    scaled-container="body">
-  <comparison-element-metric
+                    enable-transpose-action="true">
+  <comparison-element-main-metric
     label="REALTIME USERS"
+    stat="0"
     format="0,0"
-    endpoint=""
-    poll="true"
-    ></comparison-element-metric>
+    ></comparison-element-main-metric>
   <comparison-element-metric
     label="YESTERDAY"
+    stat="0"
     format="0,0"
-    endpoint=""
-    poll="true"
     ></comparison-element-metric>
   <comparison-element-metric
     label="LAST WEEK"
+    stat="0"
     format="0,0"
-    endpoint=""
-    poll="true"
     ></comparison-element-metric>
   <comparison-element-metric
     label="LAST MONTH"
+    stat="0"
     format="0,0"
-    endpoint=""
-    poll="true"
     ></comparison-element-metric>
 </comparison-element>
+
+<script>
+  document.querySelector('comparison-element').addEventListener('transpose', function(event) {
+    alert('You clicked the transpose icon! This fired off a "transpose" event that you can use to do something with!');
+  });
+</script>
 
 </body>
 </html>

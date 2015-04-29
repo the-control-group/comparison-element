@@ -16,7 +16,6 @@
 .chart {
   background-color: #00426a;
   color: #fff;
-  cursor: pointer;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   height: 100%;
@@ -24,6 +23,7 @@
 }
 
 .chart core-icon {
+  display: none;
   position: absolute;
   right: 0;
   top: 4px;
@@ -35,9 +35,8 @@
   z-index: 1;
 }
 
-.title {
+.label {
   color: #bbb;
-  text-transform: uppercase;
   white-space: nowrap;
 }
 
@@ -45,7 +44,7 @@
   height: 60%;
 }
 
-#main-metric .title {
+#main-metric .label {
   font-size: 14px;
   margin-bottom: 2px;
 }
@@ -77,11 +76,11 @@
   width: 33%;
 }
 
-.metric .title, .metric .stat, .metric .change {
+.metric .label, .metric .stat, .metric .change {
   text-align: center;
 }
 
-.metric .title {
+.metric .label {
   font-size: 8px;
   margin-bottom: 2px;
   text-align: center;

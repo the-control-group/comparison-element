@@ -18,78 +18,71 @@ Element providing solution to no problem in particular.
                                                        chart-h-axis-text-style-color
                                                        chart-v-axis-baseline-color
                                                        chart-v-axis-text-style-color
-                                                       scaled-container">
+                                                       enable-transpose-action">
   <template>
     <link rel="stylesheet" href="comparison-element.css">
+
     <div id="header">
-      <div id="chart" class="chart" on-click="{{ onChartClick }}">
-        <core-icon id="icon" icon="more-vert"></core-icon>
+      <div id="chart" class="chart">
+        <core-icon id="icon" icon="more-vert" on-click="{{onTransposeIconClick}}"></core-icon>
         <div id="line_chart"></div>
       </div>
     </div>
     <div id="body">
+      <content id="main-metric-data" select="comparison-element-main-metric"></content>
       <div id="main-metric">
-        <div>
-          <div class="title">
-            Realtime Users
+        <template id="main-metric-template" bind="{{metric}}">
+          <div>
+            <div class="label">
+              {{label}}
+            </div>
+            <div class="stat">
+              {{stat}}
+            </div>
           </div>
-          <div class="stat">
-            3,218
-          </div>
-        </div>
+        </template>
       </div>
+      <content id="metrics-data" select="comparison-element-metric"></content>
       <div id="metrics">
-        <div id="metric-1" class="metric">
-          <div>
-            <div class="title">
-              Yesterday
-            </div>
-            <div class="stat">
-              2,801
-            </div>
-            <div class="change">
-              +16.1%
-            </div>
-          </div>
-        </div>
-        <div id="metric-2" class="metric">
-          <div>
-            <div class="title">
-              Last Week
-            </div>
-            <div class="stat">
-              3,489
-            </div>
-            <div class="change negative">
-              -8.2%
+        <template id="metrics-template" repeat="{{metrics}}">
+          <div id="metric-1" class="metric">
+            <div>
+              <div class="label">
+                {{label}}
+              </div>
+              <div class="stat">
+                {{stat}}
+              </div>
+              <div class="change">
+                {{change}}
+              </div>
             </div>
           </div>
-        </div>
-        <div id="metric-3" class="metric">
-          <div>
-            <div class="title">
-              Last Month
-            </div>
-            <div class="stat">
-              2,989
-            </div>
-            <div class="change">
-              +15.2%
-            </div>
-          </div>
-        </div>
+        </template>
       </div>
     </div>
   </template>
   <script>
     Polymer({
       /**
-       * The chart object
-       * This is false because we need to detect it later on if it was initialized or not
-       * @type boolean|object
-       * @default false
+       * Publish lifecycle object (instantiate, type hint)
+       * @property {boolean|object} chart
+       * @property {string} chart-area-width
+       * @property {string} chart-area-height
+       * @property {array} chart-line-colors
+       * @property {string} chart-h-axis-text-style-color
+       * @property {string} chart-v-axis-baseline-color
+       * @property {string} chart-v-axis-text-style-color
        */
-      chart: false,
+      publish: {
+        chart: false,
+        'chart-area-width': '90%',
+        'chart-area-height': '80%',
+        'chart-line-colors': ['#fff'],
+        'chart-h-axis-text-style-color': '#fff',
+        'chart-v-axis-baseline-color': '#fff',
+        'chart-v-axis-text-style-color': '#fff'
+      },
 
       /**
        * Attribute changed lifecycle method
@@ -104,35 +97,26 @@ Element providing solution to no problem in particular.
       },
 
       /**
-       * Created lifecycle method
-       */
-      created: function() {
-        // Set default for chart area width
-        this['chart-area-width'] = '90%';
-        // Set default for chart area height
-        this['chart-area-height'] = '80%';
-        // Type hint the chart line colors config and set default
-        this['chart-line-colors'] = ['#fff'];
-        // Set default chart h axis text style color
-        this['chart-h-axis-text-style-color'] = '#fff';
-        // Set default chart v axis baseline color
-        this['chart-v-axis-baseline-color'] = '#acacac';
-        // Set default v axis text style color
-        this['chart-v-axis-text-style-color'] = '#fff';
-      },
-
-      /**
        * Ready lifecycle method
        */
       ready: function () {
+        // Render Main Metric
+        this.async(this.renderMainMetric);
+
+        // Render Additional Metrics
+        this.async(this.renderAdditionalMetrics);
+
         // Initially calculate header and body heights
-        this.calculateWidthsAndHeights.call(this);
+        this.async(this.calculateWidthsAndHeights);
 
         // Initially draw the line chart
-        this.drawChart.call(this);
+        this.async(this.drawChart);
 
-        // Setup scaled container
-        this.setupScaledContainer.call(this);
+        // Setup transpose icon if transpose action enabled
+        if (this['enable-transpose-action']) {
+          this.$.icon.style.cursor = 'pointer';
+          this.$.icon.style.display = 'block';
+        }
       },
 
       /**
@@ -163,6 +147,36 @@ Element providing solution to no problem in particular.
       },
 
       /**
+       * Render Main Metric
+       */
+      renderMainMetric: function() {
+        var data = this.$['main-metric-data'].getDistributedNodes().item(0);
+
+        this.$['main-metric-template'].model = {
+          metric: {
+            label: data.label,
+            stat: data.stat
+          }
+        };
+      },
+
+      /**
+       * Render Additional Metrics
+       */
+      renderAdditionalMetrics: function() {
+        var data = this.$['metrics-data'].getDistributedNodes().array(),
+            i;
+
+        this.$['metrics-template'].model = { metrics: [] };
+        for (i = 0; i < data.length; i++) {
+          this.$['metrics-template'].model.metrics[i] = {
+            label: data[i].label,
+            stat: data[i].stat
+          };
+        }
+      },
+
+      /**
        * Draw the chart
        */
       drawChart: function() {
@@ -170,7 +184,7 @@ Element providing solution to no problem in particular.
             baseline,
             options;
 
-        data= google.visualization.arrayToDataTable([
+        data = google.visualization.arrayToDataTable([
           ['Day', 'Stats'],
           ['01', 0],
           ['02', 2],
@@ -226,32 +240,39 @@ Element providing solution to no problem in particular.
         this.chart.draw(data, options);
       },
 
-      /**
-       * Setup scaled container
-       */
-      setupScaledContainer: function() {
-        // Determine if scaled container config is present
-        if (this['scaled-container']) {
-          //
-        } else {
-          // If scaled container config is not present remote UX that makes it appear so
-          this.$.chart.style.cursor = 'default';
-          this.$.icon.style.display = 'none';
-        }
-      },
-
       // Events
 
       /**
-       * On Chart Click
+       * On transpose icon click event
        * @param {object} event
        * @param {number} detail
        * @param {object} sender
        */
-      onChartClick: function(event, detail, sender) {
-        // Determine if scaled container config is present
-        if (this['scaled-container']) {
-          console.log(event, detail, sender);
+      onTransposeIconClick: function(event, detail, sender) {
+        this.fire('transpose');
+      }
+    });
+  </script>
+</polymer-element>
+
+<polymer-element name="comparison-element-main-metric" attributes="label stat format">
+  <script>
+    Polymer('comparison-element-main-metric', {
+      publish: {
+        stat: {
+          reflect: true
+        }
+      }
+    });
+  </script>
+</polymer-element>
+
+<polymer-element name="comparison-element-metric" attributes="label stat format">
+  <script>
+    Polymer('comparison-element-metric', {
+      publish: {
+        stat: {
+          reflect: true
         }
       }
     });
