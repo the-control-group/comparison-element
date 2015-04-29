@@ -1,0 +1,36 @@
+:host {
+  display: table-cell;
+  width: 34%;
+}
+
+:host > div {
+  padding: 4px;
+}
+
+:host:first-child, .metric:last-child {
+  width: 33%;
+}
+
+.label, .stat, .change {
+  text-align: center;
+}
+
+.label {
+  font-size: 8px;
+  margin-bottom: 2px;
+  text-align: center;
+}
+
+.stat {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.change {
+  color: #31822c;
+  font-size: 10px;
+}
+
+.change.negative {
+  color: #79141d;
+}

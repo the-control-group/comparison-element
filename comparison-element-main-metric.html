@@ -1,0 +1,18 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<polymer-element name="comparison-element-main-metric" extends="comparison-element-metric">
+  <template>
+    <link rel="stylesheet" href="comparison-element-main-metric.css">
+    <div>
+      <div class="label">
+        {{label}}
+      </div>
+      <div class="stat">
+        {{stat | formatter}}
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer();
+  </script>
+</polymer-element>

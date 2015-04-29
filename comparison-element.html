@@ -1,4 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="comparison-element-metric.html">
+<link rel="import" href="comparison-element-main-metric.html">
 
 <!--
 Element providing solution to no problem in particular.
@@ -21,7 +23,6 @@ Element providing solution to no problem in particular.
                                                        enable-transpose-action">
   <template>
     <link rel="stylesheet" href="comparison-element.css">
-
     <div id="header">
       <div id="chart" class="chart">
         <core-icon id="icon" icon="more-vert" on-click="{{onTransposeIconClick}}"></core-icon>
@@ -29,36 +30,11 @@ Element providing solution to no problem in particular.
       </div>
     </div>
     <div id="body">
-      <content id="main-metric-data" select="comparison-element-main-metric"></content>
       <div id="main-metric">
-        <template id="main-metric-template" bind="{{metric}}">
-          <div>
-            <div class="label">
-              {{label}}
-            </div>
-            <div class="stat">
-              {{stat}}
-            </div>
-          </div>
-        </template>
+        <content id="main-metric-data" select="comparison-element-main-metric"></content>
       </div>
-      <content id="metrics-data" select="comparison-element-metric"></content>
       <div id="metrics">
-        <template id="metrics-template" repeat="{{metrics}}">
-          <div id="metric-1" class="metric">
-            <div>
-              <div class="label">
-                {{label}}
-              </div>
-              <div class="stat">
-                {{stat}}
-              </div>
-              <div class="change">
-                {{change}}
-              </div>
-            </div>
-          </div>
-        </template>
+        <content id="metrics-data" select="comparison-element-metric"></content>
       </div>
     </div>
   </template>
@@ -100,12 +76,6 @@ Element providing solution to no problem in particular.
        * Ready lifecycle method
        */
       ready: function () {
-        // Render Main Metric
-        this.async(this.renderMainMetric);
-
-        // Render Additional Metrics
-        this.async(this.renderAdditionalMetrics);
-
         // Initially calculate header and body heights
         this.async(this.calculateWidthsAndHeights);
 
@@ -147,36 +117,6 @@ Element providing solution to no problem in particular.
       },
 
       /**
-       * Render Main Metric
-       */
-      renderMainMetric: function() {
-        var data = this.$['main-metric-data'].getDistributedNodes().item(0);
-
-        this.$['main-metric-template'].model = {
-          metric: {
-            label: data.label,
-            stat: data.stat
-          }
-        };
-      },
-
-      /**
-       * Render Additional Metrics
-       */
-      renderAdditionalMetrics: function() {
-        var data = this.$['metrics-data'].getDistributedNodes().array(),
-            i;
-
-        this.$['metrics-template'].model = { metrics: [] };
-        for (i = 0; i < data.length; i++) {
-          this.$['metrics-template'].model.metrics[i] = {
-            label: data[i].label,
-            stat: data[i].stat
-          };
-        }
-      },
-
-      /**
        * Draw the chart
        */
       drawChart: function() {
@@ -185,14 +125,14 @@ Element providing solution to no problem in particular.
             options;
 
         data = google.visualization.arrayToDataTable([
-          ['Day', 'Stats'],
-          ['01', 0],
-          ['02', 2],
-          ['03', 3],
-          ['04', 4],
-          ['05', 0],
-          ['06', 0],
-          ['07', 0]
+          ['Day', 'dd', 'Stats'],
+          ['01', 1, null],
+          ['02', 2, null],
+          ['03', 3, null],
+          ['04', 4, 4],
+          ['05', 6, 0],
+          ['06', null, 0],
+          ['07', 8, 0]
         ]);
 
         baseline = Math.round(2.1);
@@ -250,30 +190,6 @@ Element providing solution to no problem in particular.
        */
       onTransposeIconClick: function(event, detail, sender) {
         this.fire('transpose');
-      }
-    });
-  </script>
-</polymer-element>
-
-<polymer-element name="comparison-element-main-metric" attributes="label stat format">
-  <script>
-    Polymer('comparison-element-main-metric', {
-      publish: {
-        stat: {
-          reflect: true
-        }
-      }
-    });
-  </script>
-</polymer-element>
-
-<polymer-element name="comparison-element-metric" attributes="label stat format">
-  <script>
-    Polymer('comparison-element-metric', {
-      publish: {
-        stat: {
-          reflect: true
-        }
       }
     });
   </script>

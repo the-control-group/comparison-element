@@ -21,7 +21,8 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#~0.5",
-    "polymer-core-icons": "Polymer/core-icons#~0.5"
+    "polymer-core-icons": "Polymer/core-icons#~0.5",
+    "numeral-js": "adamwdraper/Numeral-js#~1.5"
   },
   "devDependencies": {
     "web-component-tester": "*"

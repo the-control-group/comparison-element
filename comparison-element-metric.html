@@ -1,0 +1,81 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<polymer-element name="comparison-element-metric" attributes="label stat compare-to format">
+  <template>
+    <link rel="stylesheet" href="comparison-element-metric.css">
+    <div>
+      <div class="label">
+        {{label}}
+      </div>
+      <div class="stat">
+        {{stat | formatter}}
+      </div>
+      <div class="change {{changeClass}}">
+        {{change}}
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer('comparison-element-metric', {
+      publish: {
+        stat: {
+          value: 0,
+          reflect: true
+        },
+        'compare-to': {
+          value: 0,
+          reflect: true
+        },
+        format: '0,0',
+        change: 0,
+        changeClass: {
+          value: ' ',
+          reflect: true
+        }
+      },
+
+      attributeChanged: function(attrName, oldVal, newVal) {
+        // Determine if the stat attribute has changed
+        if (attrName === 'stat') {
+          // Compare the stat
+          this.compareStat.call(this);
+        }
+      },
+
+      ready: function() {
+        // Initial stat comparison
+        this.compareStat.call(this);
+      },
+
+      compareStat: function() {
+        var change;
+
+        if (this['stat'] === 0 && this['compare-to'] === 0) {
+          this.change = '0%';
+          this.changeClass = 'negative';
+        } else {
+          change = (this['stat'] / this['compare-to']) * 100 - 100;
+
+          if (change === 0) {
+            this.change = '0%';
+            this.changeClass = 'negative';
+          } else if (change < 0) {
+            this.change = '-' + change + '%';
+            this.changeClass = 'negative';
+          } else {
+            this.change = '+' + change + '%';
+            this.changeClass = '';
+          }
+        }
+      },
+
+      // Filters
+
+      formatter: function(value, format) {
+        format = format || this.format;
+
+        return numeral(value).format(format);
+      }
+    });
+  </script>
+</polymer-element>

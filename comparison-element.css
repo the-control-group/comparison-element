@@ -40,62 +40,8 @@
   white-space: nowrap;
 }
 
-#main-metric {
-  height: 60%;
-}
-
-#main-metric .label {
-  font-size: 14px;
-  margin-bottom: 2px;
-}
-
-#main-metric .stat {
-  font-size: 42px;
-}
-
-#main-metric > div {
-  padding: 6px 12px;
-}
-
 #metrics {
   display: table;
   height: 40%;
   width: 100%;
-}
-
-.metric {
-  display: table-cell;
-  width: 34%;
-}
-
-.metric > div {
-  padding: 4px;
-}
-
-.metric:first-child, .metric:last-child {
-  width: 33%;
-}
-
-.metric .label, .metric .stat, .metric .change {
-  text-align: center;
-}
-
-.metric .label {
-  font-size: 8px;
-  margin-bottom: 2px;
-  text-align: center;
-}
-
-.metric .stat {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.metric .change {
-  color: #31822c;
-  font-size: 10px;
-}
-
-.metric .change.negative {
-  color: #79141d;
 }
