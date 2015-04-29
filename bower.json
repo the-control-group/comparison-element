@@ -20,7 +20,8 @@
     "/tests/"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.5"
+    "polymer": "Polymer/polymer#~0.5",
+    "polymer-core-icons": "Polymer/core-icons#~0.5"
   },
   "devDependencies": {
     "web-component-tester": "*"

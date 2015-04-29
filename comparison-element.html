@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+
 <!--
 Element providing solution to no problem in particular.
 
@@ -11,77 +12,248 @@ Element providing solution to no problem in particular.
 @status beta
 @homepage https://github.com/the-control-group/comparison-element
 -->
-<polymer-element name="comparison-element" attributes="notitle author">
-
+<polymer-element name="comparison-element" attributes="chart-area-width
+                                                       chart-area-height
+                                                       chart-line-colors
+                                                       chart-h-axis-text-style-color
+                                                       chart-v-axis-baseline-color
+                                                       chart-v-axis-text-style-color
+                                                       scaled-container">
   <template>
-
-    <link rel="stylesheet" href="seed-element.css">
-
-    <h1>Hello from seed-element</h1>
-    <content></content>
-
+    <link rel="stylesheet" href="comparison-element.css">
+    <div id="header">
+      <div id="chart" class="chart" on-click="{{ onChartClick }}">
+        <core-icon id="icon" icon="more-vert"></core-icon>
+        <div id="line_chart"></div>
+      </div>
+    </div>
+    <div id="body">
+      <div id="main-metric">
+        <div>
+          <div class="title">
+            Realtime Users
+          </div>
+          <div class="stat">
+            3,218
+          </div>
+        </div>
+      </div>
+      <div id="metrics">
+        <div id="metric-1" class="metric">
+          <div>
+            <div class="title">
+              Yesterday
+            </div>
+            <div class="stat">
+              2,801
+            </div>
+            <div class="change">
+              +16.1%
+            </div>
+          </div>
+        </div>
+        <div id="metric-2" class="metric">
+          <div>
+            <div class="title">
+              Last Week
+            </div>
+            <div class="stat">
+              3,489
+            </div>
+            <div class="change negative">
+              -8.2%
+            </div>
+          </div>
+        </div>
+        <div id="metric-3" class="metric">
+          <div>
+            <div class="title">
+              Last Month
+            </div>
+            <div class="stat">
+              2,989
+            </div>
+            <div class="change">
+              +15.2%
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </template>
-
   <script>
-
     Polymer({
       /**
-       * The `author` attribute sets an initial author
-       *
-       * @attribute author
-       * @type string
-       * @default 'Dimitri Glazkov'
-       */
-      author: 'Dimitri Glazkov',
-
-      /**
-       * `fancy` is a property that does something fancy.
-       *
-       * @property fancy
-       * @type bool
+       * The chart object
+       * This is false because we need to detect it later on if it was initialized or not
+       * @type boolean|object
        * @default false
        */
-      fancy: false,
+      chart: false,
 
+      /**
+       * Attribute changed lifecycle method
+       * @param {string} attrName
+       * @param {string} oldVal
+       * @param {string} newVal
+       */
+      attributeChanged: function(attrName, oldVal, newVal) {
+        // Listen for when the element height changes to calculate the height of the direct children of the header
+        // and body
+        this.calculateWidthsAndHeights.call(this);
+      },
+
+      /**
+       * Created lifecycle method
+       */
+      created: function() {
+        // Set default for chart area width
+        this['chart-area-width'] = '90%';
+        // Set default for chart area height
+        this['chart-area-height'] = '80%';
+        // Type hint the chart line colors config and set default
+        this['chart-line-colors'] = ['#fff'];
+        // Set default chart h axis text style color
+        this['chart-h-axis-text-style-color'] = '#fff';
+        // Set default chart v axis baseline color
+        this['chart-v-axis-baseline-color'] = '#acacac';
+        // Set default v axis text style color
+        this['chart-v-axis-text-style-color'] = '#fff';
+      },
+
+      /**
+       * Ready lifecycle method
+       */
       ready: function () {
-        // Ready is a lifecycle callback.
-        // You can do setup work in here.
-        // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
+        // Initially calculate header and body heights
+        this.calculateWidthsAndHeights.call(this);
+
+        // Initially draw the line chart
+        this.drawChart.call(this);
+
+        // Setup scaled container
+        this.setupScaledContainer.call(this);
       },
 
       /**
-       * The `sayHello` method will return a greeting.
-       *
-       * @method sayHello
-       * @param {String} greeting Pass in a specific greeting.
-       * @return {String} Returns a string greeting.
+       * Calculate widths and heights method for layout re-rendering
        */
-      sayHello: function (greeting) {
-        var response = greeting || 'Hello World!';
-        return 'seed-element says, ' + response;
+      calculateWidthsAndHeights: function() {
+       var header = this.$.header,
+           lineChart = this.$.line_chart,
+           body = this.$.body,
+           lineChartWidth,
+           lineChartHeight,
+           headerHeight,
+           bodyHeight;
+
+          // Calculate header height (48%)
+          headerHeight = Math.round(.48 * this.clientHeight);
+          header.style.height = headerHeight + 'px';
+
+          // Calculate line chart width and height
+          lineChartWidth = header.clientWidth;
+          lineChartHeight = headerHeight;
+          lineChart.style.width = lineChartWidth + 'px';
+          lineChart.style.height = lineChartHeight + 'px';
+
+          // Calculate body height (52%)
+          bodyHeight = Math.round(.52 * this.clientHeight);
+          body.style.height = bodyHeight + 'px';
       },
 
       /**
-       * The `seed-element-lasers-success` event is fired whenever we
-       * call fireLasers.
-       *
-       * @event seed-element-lasers-success
-       * @param {Object} detail
-       *   @param {string} detail.sound An amazing sound.
+       * Draw the chart
        */
+      drawChart: function() {
+        var data,
+            baseline,
+            options;
+
+        data= google.visualization.arrayToDataTable([
+          ['Day', 'Stats'],
+          ['01', 0],
+          ['02', 2],
+          ['03', 3],
+          ['04', 4],
+          ['05', 0],
+          ['06', 0],
+          ['07', 0]
+        ]);
+
+        baseline = Math.round(2.1);
+
+        options = {
+          backgroundColor: 'transparent',
+          chartArea: {
+            left: 13,
+            top: 10,
+            width: this['chart-area-width'],
+            height:this['chart-area-height']
+          },
+          colors: this['chart-line-colors'],
+          curveType: 'function',
+          hAxis: {
+            textStyle: {
+              color: this['chart-h-axis-text-style-color'],
+              opacity: 0.5
+            }
+          },
+          legend: {
+            position: 'none'
+          },
+          lineWidth: 2,
+          vAxis: {
+            baseline: baseline,
+            baselineColor: this['chart-v-axis-baseline-color'],
+            format: 'short',
+            gridlines: {
+              color: 'transparent',
+              count: 5
+            },
+            textStyle: {
+              color: this['chart-v-axis-text-style-color'],
+              opacity: 0.5
+            }
+          }
+        };
+
+        // Determine if the chart has been initialized
+        if (!this.chart) {
+          this.chart = new google.visualization.LineChart(this.$.line_chart);
+        }
+
+        this.chart.draw(data, options);
+      },
 
       /**
-       * The `fireLasers` method will fire the lasers. At least
-       * it will dispatch an event that claims lasers were fired :)
-       *
-       * @method fireLasers
+       * Setup scaled container
        */
-      fireLasers: function () {
-        this.fire('seed-element-lasers-success', {sound: 'Pew pew pew!'});
+      setupScaledContainer: function() {
+        // Determine if scaled container config is present
+        if (this['scaled-container']) {
+          //
+        } else {
+          // If scaled container config is not present remote UX that makes it appear so
+          this.$.chart.style.cursor = 'default';
+          this.$.icon.style.display = 'none';
+        }
+      },
+
+      // Events
+
+      /**
+       * On Chart Click
+       * @param {object} event
+       * @param {number} detail
+       * @param {object} sender
+       */
+      onChartClick: function(event, detail, sender) {
+        // Determine if scaled container config is present
+        if (this['scaled-container']) {
+          console.log(event, detail, sender);
+        }
       }
-
     });
-
   </script>
-
 </polymer-element>

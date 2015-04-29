@@ -14,16 +14,57 @@
   <title>seed-element Demo</title>
 
   <script src="../webcomponentsjs/webcomponents.min.js"></script>
+  <script type="text/javascript"
+          src="https://www.google.com/jsapi?autoload={
+            'modules': [{
+              'name': 'visualization',
+              'version': '1',
+              'packages': ['corechart']
+            }]
+  }"></script>
+
+  <link rel="import" href="../core-icons/core-icons.html">
+
   <link rel="import" href="comparison-element.html">
+  <style>
+    body {
+      font-family: helvetica;
+    }
+  </style>
 
 </head>
 <body unresolved>
 
 <p>An example of using <code>&lt;comparison-element&gt;</code>:</p>
 
-<seed-element>
-  <h2>Hello comparison-element</h2>
-</seed-element>
+<comparison-element chart-line-colors='["#fff"]' chart-h-axis-text-style-color="#fff"
+                    chart-v-axis-baseline-color="#acacac" chart-v-axis-text-style-color="#fff"
+                    scaled-container="body">
+  <comparison-element-metric
+    label="REALTIME USERS"
+    format="0,0"
+    endpoint=""
+    poll="true"
+    ></comparison-element-metric>
+  <comparison-element-metric
+    label="YESTERDAY"
+    format="0,0"
+    endpoint=""
+    poll="true"
+    ></comparison-element-metric>
+  <comparison-element-metric
+    label="LAST WEEK"
+    format="0,0"
+    endpoint=""
+    poll="true"
+    ></comparison-element-metric>
+  <comparison-element-metric
+    label="LAST MONTH"
+    format="0,0"
+    endpoint=""
+    poll="true"
+    ></comparison-element-metric>
+</comparison-element>
 
 </body>
 </html>
