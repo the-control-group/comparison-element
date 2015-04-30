@@ -4,13 +4,41 @@
   color: #000;
   display: block;
   height: 260px;
+  perspective: 1000;
+  transition: 0.6s;
+  transform-style: preserve-3d;
   width: 200px;
+}
+
+:host(.transposed) {
+  transform: rotateY(180deg);
+}
+
+#front, #back {
+  backface-visibility: hidden;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#front {
+  transform: rotateY(0deg);
+  z-index: 2;
+}
+
+#back {
+  background-color: #eeeeee;
+  padding: 4px;
+  transform: rotateY(180deg);
 }
 
 #header {
 }
 
 #body {
+  position: relative;
 }
 
 .chart {
@@ -35,13 +63,27 @@
   z-index: 1;
 }
 
+#action {
+  border: 0;
+  bottom: -20px;
+  display: none;
+  position: absolute;
+  right: 10px;
+  z-index: 2;
+}
+
 .label {
   color: #bbb;
   white-space: nowrap;
 }
 
 #metrics {
+  background-color: #eeeeee;
+  bottom: 0;
   display: table;
   height: 40%;
+  left: 0;
+  position: absolute;
+  right: 0;
   width: 100%;
 }

@@ -31,8 +31,11 @@
 <p>An example of using <code>&lt;comparison-element&gt;</code>:</p>
 
 
-<comparison-element chart-line-colors='["#fff"]' chart-h-axis-text-style-color="#fff"
+<comparison-element chart-data-columns="['Day', 'Realtime Users', 'Realtime Users Predicted']"
+                    chart-data-rows="[[1, 1, null], [2, 2, null], [3, 3, null], [4, 2, 2], [5, null, 3], [6, null, 2], [7, null, 2]]"
+                    chart-line-colors="['#fff', '#a6a6a6']" chart-h-axis-text-style-color="#fff"
                     chart-v-axis-baseline-color="#acacac" chart-v-axis-text-style-color="#fff"
+                    enable-menu-action="true"
                     enable-transpose-action="true">
   <comparison-element-main-metric
     label="REALTIME USERS"
@@ -54,12 +57,23 @@
     stat="0"
     compare-to="0"
     ></comparison-element-metric>
+  <transposed-content>
+    Transposed Content
+  </transposed-content>
 </comparison-element>
 
 <script>
-  document.querySelector('comparison-element').addEventListener('transpose', function(event) {
-    alert('You clicked the transpose icon! This fired off a "transpose" event that you can use to do something with!');
+  document.querySelector('comparison-element').addEventListener('menu-click', function(event) {
+    alert('You clicked the menu icon! This fired off a "menu-click" event that you can use to do something with!');
   });
+  document.querySelector('comparison-element').addEventListener('transpose-action-click', function(event) {
+    alert('You clicked the transpose image! This fired off a "ranspose-action-click" event that you can use to do something with!');
+  });
+  setInterval(function() {
+    var count = Math.floor((Math.random() * 6000) + 1);
+    document.querySelector('comparison-element-main-metric').setAttribute('stat', count);
+  }, 2000);
+
 </script>
 
 </body>

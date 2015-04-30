@@ -13,29 +13,38 @@ Element providing solution to no problem in particular.
 @blurb Element providing graphical metric comparison.
 @status beta
 @homepage https://github.com/the-control-group/comparison-element
+@see https://developers.google.com/chart/interactive/docs/gallery/linechart
 -->
 <polymer-element name="comparison-element" attributes="chart-area-width
                                                        chart-area-height
+                                                       chart-data-columns
+                                                       chart-data-rows
                                                        chart-line-colors
                                                        chart-h-axis-text-style-color
-                                                       chart-v-axis-baseline-color
                                                        chart-v-axis-text-style-color
+                                                       enable-menu-action
                                                        enable-transpose-action">
-  <template>
+  <template class="test">
     <link rel="stylesheet" href="comparison-element.css">
-    <div id="header">
-      <div id="chart" class="chart">
-        <core-icon id="icon" icon="more-vert" on-click="{{onTransposeIconClick}}"></core-icon>
-        <div id="line_chart"></div>
+    <div id="front">
+      <div id="header">
+        <div id="chart" class="chart">
+          <core-icon id="icon" icon="more-vert" on-click="{{onMenuIconClick}}"></core-icon>
+          <div id="line_chart"></div>
+          <img id="action" src="action.png" on-click="{{onTransposeImageClick}}">
+        </div>
+      </div>
+      <div id="body">
+        <div id="main-metric">
+          <content id="main-metric-data" select="comparison-element-main-metric"></content>
+        </div>
+        <div id="metrics">
+          <content id="metrics-data" select="comparison-element-metric"></content>
+        </div>
       </div>
     </div>
-    <div id="body">
-      <div id="main-metric">
-        <content id="main-metric-data" select="comparison-element-main-metric"></content>
-      </div>
-      <div id="metrics">
-        <content id="metrics-data" select="comparison-element-metric"></content>
-      </div>
+    <div id="back">
+      <content id="transposed-content" select="transposed-content"></content>
     </div>
   </template>
   <script>
@@ -45,19 +54,35 @@ Element providing solution to no problem in particular.
        * @property {boolean|object} chart
        * @property {string} chart-area-width
        * @property {string} chart-area-height
+       * @property {array} chart-data-columns
+       * @property {array} chart-data-rows
+       * @property {number} chart-data-baseline
        * @property {array} chart-line-colors
        * @property {string} chart-h-axis-text-style-color
-       * @property {string} chart-v-axis-baseline-color
        * @property {string} chart-v-axis-text-style-color
+       * @property {boolean} enable-transpose-action
        */
       publish: {
         chart: false,
-        'chart-area-width': '90%',
-        'chart-area-height': '80%',
-        'chart-line-colors': ['#fff'],
+        'chart-area-width': '82%',
+        'chart-area-height': '70%',
+        'chart-data-columns': {
+          value: ['Day', 'Metric'],
+          reflect: true
+        },
+        'chart-data-rows': {
+          value: [],
+          reflect: true
+        },
+        'chart-data-baseline': {
+          value: 0,
+          reflect: true
+        },
+        'chart-line-colors': ['#fff', '#ffd200'],
         'chart-h-axis-text-style-color': '#fff',
-        'chart-v-axis-baseline-color': '#fff',
-        'chart-v-axis-text-style-color': '#fff'
+        'chart-v-axis-text-style-color': '#fff',
+        'enable-menu-action': false,
+        'enable-transpose-action': false
       },
 
       /**
@@ -82,11 +107,20 @@ Element providing solution to no problem in particular.
         // Initially draw the line chart
         this.async(this.drawChart);
 
-        // Setup transpose icon if transpose action enabled
-        if (this['enable-transpose-action']) {
+        // Setup menu icon if menu action enabled
+        if (this['enable-menu-action']) {
           this.$.icon.style.cursor = 'pointer';
           this.$.icon.style.display = 'block';
         }
+
+        // Setup transpose image if transpose action enabled
+        if (this['enable-transpose-action']) {
+          this.$.action.style.cursor = 'pointer';
+          this.$.action.style.display = 'block';
+        }
+
+        // Element mouseleave event
+        this.addEventListener('mouseleave', this.onElementMouseleave);
       },
 
       /**
@@ -120,25 +154,29 @@ Element providing solution to no problem in particular.
        * Draw the chart
        */
       drawChart: function() {
-        var data,
-            baseline,
-            options;
+        var data = new google.visualization.DataTable(),
+            options,
+            i,
+            type;
 
-        data = google.visualization.arrayToDataTable([
-          ['Day', 'dd', 'Stats'],
-          ['01', 1, null],
-          ['02', 2, null],
-          ['03', 3, null],
-          ['04', 4, 4],
-          ['05', 6, 0],
-          ['06', null, 0],
-          ['07', 8, 0]
-        ]);
+        // Add the columns
+        for (i = 0; i < this['chart-data-columns'].length; i++) {
+          if (i === 0) {
+            type = 'number';
+          } else {
+            type = 'number';
+          }
+          data.addColumn(type, this['chart-data-columns'][i]);
+        }
 
-        baseline = Math.round(2.1);
+        // Add the rows
+        data.addRows(this['chart-data-rows']);
 
+        // Set the options
         options = {
-          backgroundColor: 'transparent',
+          backgroundColor: {
+            fill: 'transparent'
+          },
           chartArea: {
             left: 13,
             top: 10,
@@ -148,6 +186,11 @@ Element providing solution to no problem in particular.
           colors: this['chart-line-colors'],
           curveType: 'function',
           hAxis: {
+            baselineColor: 'transparent',
+            gridlines: {
+              color: 'transparent',
+              count: this['chart-data-rows'] ? this['chart-data-rows'].length : 0
+            },
             textStyle: {
               color: this['chart-h-axis-text-style-color'],
               opacity: 0.5
@@ -157,9 +200,14 @@ Element providing solution to no problem in particular.
             position: 'none'
           },
           lineWidth: 2,
+          trendlines: {
+            0: {
+              lineWidth: 1
+            }
+          },
           vAxis: {
-            baseline: baseline,
-            baselineColor: this['chart-v-axis-baseline-color'],
+            baseline: this['chart-data-baseline'],
+            baselineColor: 'transparent',
             format: 'short',
             gridlines: {
               color: 'transparent',
@@ -174,22 +222,52 @@ Element providing solution to no problem in particular.
 
         // Determine if the chart has been initialized
         if (!this.chart) {
+          // Initiliaze the chart
           this.chart = new google.visualization.LineChart(this.$.line_chart);
         }
 
+        // Draw the chart
         this.chart.draw(data, options);
       },
 
       // Events
 
       /**
-       * On transpose icon click event
+       * On menu icon click event
        * @param {object} event
        * @param {number} detail
        * @param {object} sender
        */
-      onTransposeIconClick: function(event, detail, sender) {
-        this.fire('transpose');
+      onMenuIconClick: function(event, detail, sender) {
+        this.fire('menu-click');
+      },
+
+      /**
+       * on element mouseleave
+       * @param {object} event
+       * @param {number} detail
+       * @param {object} sender
+       */
+      onElementMouseleave: function(event, detail, sender) {
+        var transposedClassRegExp = new RegExp('(\\s|^)transposed(\\s|$)');
+
+        // Remove transposed class
+        this.className = this.className.replace(transposedClassRegExp, ' ');
+      },
+
+      /**
+       * On transpose image click event
+       * @param {object} event
+       * @param {number} detail
+       * @param {object} sender
+       */
+      onTransposeImageClick: function(event, detail, sender) {
+        // Add transposed class
+        if (!this.className.match(new RegExp('(\\s|^)transposed(\\s|$)'))) {
+          this.className += ' ' + 'transposed';
+        }
+
+        this.fire('transpose-action-click');
       }
     });
   </script>
