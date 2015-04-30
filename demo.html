@@ -70,8 +70,14 @@
     alert('You clicked the transpose image! This fired off a "ranspose-action-click" event that you can use to do something with!');
   });
   setInterval(function() {
-    var count = Math.floor((Math.random() * 6000) + 1);
+    var count = Math.floor((Math.random() * 6000) + 1),
+        metrics = document.querySelectorAll('comparison-element-metric'),
+        i;
+
     document.querySelector('comparison-element-main-metric').setAttribute('stat', count);
+    for (i = 0; i < metrics.length; i++) {
+      metrics[i].setAttribute('compare-to', count);
+    }
   }, 2000);
 
 </script>

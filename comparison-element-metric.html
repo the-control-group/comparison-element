@@ -27,7 +27,10 @@
           reflect: true
         },
         format: '0,0',
-        change: 0,
+        change: {
+          value: 0,
+          reflect: true
+        },
         changeClass: {
           value: ' ',
           reflect: true
@@ -36,7 +39,7 @@
 
       attributeChanged: function(attrName, oldVal, newVal) {
         // Determine if the stat attribute has changed
-        if (attrName === 'stat') {
+        if (attrName === 'stat' || attrName === 'compare-to') {
           // Compare the stat
           this.compareStat.call(this);
         }
@@ -54,18 +57,23 @@
           this.change = '0%';
           this.changeClass = 'negative';
         } else {
-          change = (this['stat'] / this['compare-to']) * 100 - 100;
+          if (this['compare-to'] === 0) {
+            change = this['stat'] * -100;
+          } else if (this['stat'] === 0) {
+            change = this['compare-to'] * 100;
+          } else {
+            change = (this['compare-to'] / this['stat']) * 100 - 100;
+          }
 
           if (change === 0) {
-            this.change = '0%';
             this.changeClass = 'negative';
           } else if (change < 0) {
-            this.change = '-' + change + '%';
             this.changeClass = 'negative';
           } else {
-            this.change = '+' + change + '%';
             this.changeClass = '';
           }
+
+          this.change = numeral(change).format('+0,0') + '%';
         }
       },
 
