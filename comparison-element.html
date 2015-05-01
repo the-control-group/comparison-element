@@ -1,27 +1,66 @@
+<script src="../highcharts/adapters/standalone-framework.js"></script>
+<script src="../highcharts/highcharts.js"></script>
+<script src="../numeral-js/min/numeral.min.js"></script>
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="comparison-element-metric.html">
-<link rel="import" href="comparison-element-main-metric.html">
+<link rel="import" href="../core-icons/core-icons.html">
 
 <!--
-Element providing solution to no problem in particular.
+Element that provides a comparison widget to be used as a card on an admin dashboard.
 
 ##### Example
 
-    <comparison-element></comparison-element>
+    <comparison-element chart-data-categories="['01', '02', '03', '04', '05', '06', '07']"
+                    chart-data-series="[{'name': 'Realtime Users', 'data': [500, 1000, 3000, 4000, null, null, null]}, {'name': 'Predicted Realtime Users', 'data': [null, null, null, 4000, 3000, 2000, 1700]}]"
+                    chart-data-selected="[false, 3000]"
+                    chart-data-trendline="2000"
+                    chart-line-colors="['#fff', '#acacac']" chart-line-styles="['Solid', 'ShortDash']"
+                    chart-x-axis-gridline-color="rgba(0, 0, 0, .1)" chart-trendline-color="rgba(255, 255, 255, .2)"
+                    chart-x-axis-text-color="#fff" chart-y-axis-text-color="#fff"
+                    chart-tooltip-format="0,0"
+                    enable-menu-action="true"
+                    enable-transpose-action="true">
+    <comparison-element-main-metric
+      label="REALTIME USERS"
+      stat="0"
+      ></comparison-element-main-metric>
+    <comparison-element-metric
+      label="YESTERDAY"
+      stat="0"
+      compare-to="0"
+      format="0,0"
+      ></comparison-element-metric>
+    <comparison-element-metric
+      label="LAST WEEK"
+      stat="0"
+      compare-to="0"
+      ></comparison-element-metric>
+    <comparison-element-metric
+      label="LAST MONTH"
+      stat="0"
+      compare-to="0"
+      ></comparison-element-metric>
+    <transposed-content>
+      Transposed Content
+    </transposed-content>
+  </comparison-element>
 
 @element comparison-element
-@blurb Element providing graphical metric comparison.
+@blurb Element that provides a comparison widget to be used as a card on an admin dashboard.
 @status beta
 @homepage https://github.com/the-control-group/comparison-element
-@see https://developers.google.com/chart/interactive/docs/gallery/linechart
+@see http://api.highcharts.com/highcharts
 -->
-<polymer-element name="comparison-element" attributes="chart-area-width
-                                                       chart-area-height
-                                                       chart-data-columns
-                                                       chart-data-rows
+<polymer-element name="comparison-element" attributes="chart-data-categories
+                                                       chart-data-series
+                                                       chart-data-selected
+                                                       chart-data-trendline
                                                        chart-line-colors
-                                                       chart-h-axis-text-style-color
-                                                       chart-v-axis-text-style-color
+                                                       chart-line-styles
+                                                       chart-trendline-color
+                                                       chart-x-axis-gridline-color
+                                                       chart-x-axis-text-color
+                                                       chart-y-axis-text-color
+                                                       chart-tooltip-format
                                                        enable-menu-action
                                                        enable-transpose-action">
   <template class="test">
@@ -51,36 +90,43 @@ Element providing solution to no problem in particular.
     Polymer({
       /**
        * Publish lifecycle object (instantiate, type hint)
-       * @property {boolean|object} chart
-       * @property {string} chart-area-width
-       * @property {string} chart-area-height
-       * @property {array} chart-data-columns
-       * @property {array} chart-data-rows
-       * @property {number} chart-data-baseline
+       * @property {object} chart
+       * @property {array} chart-data-categories
+       * @property {array} chart-data-series
+       * @property {array} chart-data-selected
+       * @property {number} chart-data-trendline
        * @property {array} chart-line-colors
-       * @property {string} chart-h-axis-text-style-color
-       * @property {string} chart-v-axis-text-style-color
+       * @property {array} chart-line-styles
+       * @property {string} chart-trendline-color
+       * @property {string} chart-x-axis-gridline-color
+       * @property {string} chart-x-axis-text-color
+       * @property {string} chart-y-axis-text-color
+       * @property {string} chart-tooltip-format
+       * @property {boolean} enable-menu-action
        * @property {boolean} enable-transpose-action
        */
       publish: {
-        chart: false,
-        'chart-area-width': '82%',
-        'chart-area-height': '70%',
-        'chart-data-columns': {
-          value: ['Day', 'Metric'],
-          reflect: true
-        },
-        'chart-data-rows': {
+        chart: undefined,
+        'chart-data-categories': [],
+        'chart-data-series': {
           value: [],
           reflect: true
         },
-        'chart-data-baseline': {
-          value: 0,
+        'chart-data-selected': {
+          value: [],
+          reflect: true
+        },
+        'chart-data-trendline': {
+          value: undefined,
           reflect: true
         },
         'chart-line-colors': ['#fff', '#ffd200'],
-        'chart-h-axis-text-style-color': '#fff',
-        'chart-v-axis-text-style-color': '#fff',
+        'chart-line-styles': ['Solid', 'ShortDash'],
+        'chart-trendline-color': 'rgba(255, 255, 255, .2)',
+        'chart-x-axis-gridline-color': 'rgba(0, 0, 0, .1)',
+        'chart-x-axis-text-color': '#fff',
+        'chart-y-axis-text-color': '#fff',
+        'chart-tooltip-format': '0,0',
         'enable-menu-action': false,
         'enable-transpose-action': false
       },
@@ -100,27 +146,27 @@ Element providing solution to no problem in particular.
       /**
        * Ready lifecycle method
        */
-      ready: function () {
-        // Initially calculate header and body heights
-        this.async(this.calculateWidthsAndHeights);
+      ready: function (event, detail, sender) {
+          // Initially calculate header and body heights
+          this.async(this.calculateWidthsAndHeights);
 
-        // Initially draw the line chart
-        this.async(this.drawChart);
+          // Initially draw the line chart
+          this.async(this.drawChart);
 
-        // Setup menu icon if menu action enabled
-        if (this['enable-menu-action']) {
-          this.$.icon.style.cursor = 'pointer';
-          this.$.icon.style.display = 'block';
-        }
+          // Setup menu icon if menu action enabled
+          if (this['enable-menu-action']) {
+            this.$.icon.style.cursor = 'pointer';
+            this.$.icon.style.display = 'block';
+          }
 
-        // Setup transpose image if transpose action enabled
-        if (this['enable-transpose-action']) {
-          this.$.action.style.cursor = 'pointer';
-          this.$.action.style.display = 'block';
-        }
+          // Setup transpose image if transpose action enabled
+          if (this['enable-transpose-action']) {
+            this.$.action.style.cursor = 'pointer';
+            this.$.action.style.display = 'block';
+          }
 
-        // Element mouseleave event
-        this.addEventListener('mouseleave', this.onElementMouseleave);
+          // Element mouseleave event
+          this.addEventListener('mouseleave', this.onElementMouseleave);
       },
 
       /**
@@ -154,80 +200,135 @@ Element providing solution to no problem in particular.
        * Draw the chart
        */
       drawChart: function() {
-        var data = new google.visualization.DataTable(),
-            options,
+        var config,
             i,
-            type;
+            j;
 
-        // Add the columns
-        for (i = 0; i < this['chart-data-columns'].length; i++) {
-          if (i === 0) {
-            type = 'number';
-          } else {
-            type = 'number';
-          }
-          data.addColumn(type, this['chart-data-columns'][i]);
-        }
-
-        // Add the rows
-        data.addRows(this['chart-data-rows']);
-
-        // Set the options
-        options = {
-          backgroundColor: {
-            fill: 'transparent'
+        // Generate config data
+        config = {
+          chart: {
+            backgroundColor: 'transparent',
+              renderTo: this.$.line_chart,
+              //spacing: [5, 25, 15, 5],
+              spacing: [5, 20, 5, 5],
+              type: 'spline'
           },
-          chartArea: {
-            left: 13,
-            top: 10,
-            width: this['chart-area-width'],
-            height:this['chart-area-height']
-          },
-          colors: this['chart-line-colors'],
-          curveType: 'function',
-          hAxis: {
-            baselineColor: 'transparent',
-            gridlines: {
-              color: 'transparent',
-              count: this['chart-data-rows'] ? this['chart-data-rows'].length : 0
-            },
-            textStyle: {
-              color: this['chart-h-axis-text-style-color'],
-              opacity: 0.5
-            }
+          credits: {
+            enabled: false
           },
           legend: {
-            position: 'none'
+            enabled: false
           },
-          lineWidth: 2,
-          trendlines: {
-            0: {
-              lineWidth: 1
+          plotOptions: {
+            spline: {
+              marker: {
+                enabled: false,
+                symbol: 'circle'
+              }
             }
           },
-          vAxis: {
-            baseline: this['chart-data-baseline'],
-            baselineColor: 'transparent',
-            format: 'short',
-            gridlines: {
-              color: 'transparent',
-              count: 5
+          title: {
+            text: null
+          },
+          tooltip: {
+            formatter: function() {
+              return numeral(this.y).format(this['chart-tooltip-format']);
+            }
+          },
+          xAxis: {
+            categories: this['chart-data-categories'],
+            labels: {
+              style: {
+                color: this['chart-x-axis-text-color'],
+                fontSize: '6px',
+                opacity: .5
+              }
             },
-            textStyle: {
-              color: this['chart-v-axis-text-style-color'],
-              opacity: 0.5
+            lineWidth: 0,
+            opposite: true,
+            tickColor: null,
+            title: {
+              enabled: false
+            }
+          },
+          yAxis: {
+            allowDecimals: false,
+            endOnTick: false,
+            gridLineWidth: 0,
+            labels: {
+              style: {
+                color: this['chart-y-axis-text-color'],
+                fontSize: '8px',
+                opacity: .5
+              }
+            },
+            startOnTick: false,
+            tickAmount: 5,
+            title: {
+              enabled: false
             }
           }
         };
 
+        // Transform the x axis gridline
+        if (this['chart-x-axis-gridline-color']) {
+          config.xAxis.gridLineColor = this['chart-x-axis-gridline-color'];
+          config.xAxis.gridLineWidth = 1;
+        }
+
+        // Transform the series data
+        config.series = [];
+        for (i = 0; i < this['chart-data-series'].length; i++) {
+          config.series[i] = this['chart-data-series'][i];
+          config.series[i].lineWidth = 1.5;
+          config.series[i].color = this['chart-line-colors'][i] || (i > 0 ? config.series[--i].color : this['chart-line-colors'][0]);
+          config.series[i].dashStyle = this['chart-line-styles'][i] || 'Solid';
+        }
+
+        // Set selected markers
+        for (i = 0; i < this['chart-data-selected'].length; i++) {
+          for (j = 0; j < config.series[i].data.length; j++) {
+            // Determine if the index matches (remember, zero indexed)
+            if ((j + 1) === this['chart-data-selected'][i]) {
+              config.series[i].zoneAxis = 'x';
+              config.series[i].zones = [{
+                value: j
+              }, {
+                dashStyle: 'shortDash'
+              }];
+              config.series[i].data[j] = {
+                marker: {
+                  enabled: true,
+                  fillColor: 'transparent',
+                  lineWidth: 2,
+                  lineColor: config.series[i].color
+                },
+                y: config.series[i].data[j]
+              };
+            }
+          }
+        }
+
+        // Transform the trendline
+        if (this['chart-data-trendline']) {
+          config.yAxis.plotLines = [{
+            color: this['chart-trendline-color'],
+            dashStyle: 'ShortDash',
+            value: this['chart-data-trendline'],
+            width: 1,
+            zIndex: 2
+          }];
+        }
+
         // Determine if the chart has been initialized
         if (!this.chart) {
           // Initiliaze the chart
-          this.chart = new google.visualization.LineChart(this.$.line_chart);
+          this.chart = new Highcharts.Chart(config);
+          //this.chart = new google.visualization.LineChart(this.$.line_chart);
         }
 
-        // Draw the chart
-        this.chart.draw(data, options);
+//        // Draw the chart
+//        this.chart.draw(data, options);
       },
 
       // Events
@@ -270,5 +371,169 @@ Element providing solution to no problem in particular.
         this.fire('transpose-action-click');
       }
     });
+  </script>
+</polymer-element>
+
+<!--
+Element that provides a metric config for the comparison-element.
+
+##### Example
+
+    <comparison-element-metric
+      label="YESTERDAY"
+      stat="0"
+      compare-to="0"
+      format="0,0"
+      ></comparison-element-metric>
+
+@element comparison-element-metric
+@blurb Element that provides a metric config for the comparison-element.
+@status beta
+@homepage https://github.com/the-control-group/comparison-element
+-->
+<polymer-element name="comparison-element-metric" attributes="label stat compare-to format">
+  <template>
+    <link rel="stylesheet" href="comparison-element-metric.css">
+    <div>
+      <div class="label">
+        {{label}}
+      </div>
+      <div class="stat">
+        {{stat | formatter}}
+      </div>
+      <div class="change {{changeClass}}">
+        {{change}}
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer('comparison-element-metric', {
+      /**
+       * Publish lifecycle object (instantiate, type hint)
+       * @property {number} stat
+       * @property {number} compare-to
+       * @property {string} format Numeral-js format
+       * @property {number} change
+       * @property {string} changeClass
+       */
+      publish: {
+        stat: {
+          value: 0,
+          reflect: true
+        },
+        'compare-to': {
+          value: 0,
+          reflect: true
+        },
+        format: '0,0',
+        change: {
+          value: 0,
+          reflect: true
+        },
+        changeClass: {
+          value: ' ',
+          reflect: true
+        }
+      },
+
+      /**
+       * Attribute changed lifecycle method
+       * @param {string} attrName
+       * @param {string} oldVal
+       * @param {string} newVal
+       */
+      attributeChanged: function(attrName, oldVal, newVal) {
+        // Determine if the stat attribute has changed
+        if (attrName === 'stat' || attrName === 'compare-to') {
+          // Compare the stat
+          this.compareStat.call(this);
+        }
+      },
+
+      /**
+       * Ready lifecycle method
+       */
+      ready: function() {
+        // Initial stat comparison
+        this.compareStat.call(this);
+      },
+
+      /**
+       * Compare state method
+       */
+      compareStat: function() {
+        var change;
+
+        if (this['stat'] === 0 && this['compare-to'] === 0) {
+          this.change = '0%';
+          this.changeClass = 'negative';
+        } else {
+          if (this['compare-to'] === 0) {
+            change = this['stat'] * -100;
+          } else if (this['stat'] === 0) {
+            change = this['compare-to'] * 100;
+          } else {
+            change = (this['compare-to'] / this['stat']) * 100 - 100;
+          }
+
+          if (change === 0) {
+            this.changeClass = 'negative';
+          } else if (change < 0) {
+            this.changeClass = 'negative';
+          } else {
+            this.changeClass = '';
+          }
+
+          this.change = numeral(change).format('+0,0') + '%';
+        }
+      },
+
+      // Filters
+
+      /**
+       * Formatter filter method, formats to a numeral-js format
+       * @param value
+       * @param format
+       * @returns {string}
+       */
+      formatter: function(value, format) {
+        format = format || this.format;
+
+        return numeral(value).format(format);
+      }
+    });
+  </script>
+</polymer-element>
+
+<!--
+Element that provides a main metric config for the comparison-element.
+
+##### Example
+
+    <comparison-element-main-metric
+    label="REALTIME USERS"
+    stat="0"
+    ></comparison-element-main-metric>
+
+@element comparison-element-main-metric
+@extends comparison-element-metric
+@blurb Element that provides a main metric config for the comparison-element.
+@status beta
+@homepage https://github.com/the-control-group/comparison-element
+-->
+<polymer-element name="comparison-element-main-metric" extends="comparison-element-metric">
+  <template>
+    <link rel="stylesheet" href="comparison-element-main-metric.css">
+    <div>
+      <div class="label">
+        {{label}}
+      </div>
+      <div class="stat">
+        {{stat | formatter}}
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer();
   </script>
 </polymer-element>

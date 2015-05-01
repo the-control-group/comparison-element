@@ -1,6 +1,6 @@
 {
   "name": "comparison-element",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "authors": [
     "Darren Labey <darren.labey@thecontrolgroup.com>"
   ],
@@ -12,7 +12,7 @@
     "comparison",
     "metric"
   ],
-  "main": "seed-element.html",
+  "main": "comparison-element.html",
   "license": "MIT",
   "homepage": "https://github.com/<USERNAME>/seed-element/",
   "ignore": [
@@ -22,6 +22,7 @@
   "dependencies": {
     "polymer": "Polymer/polymer#~0.5",
     "polymer-core-icons": "Polymer/core-icons#~0.5",
+    "highcharts": "highslide-software/highcharts-release#~v4.1",
     "numeral-js": "adamwdraper/Numeral-js#~1.5"
   },
   "devDependencies": {

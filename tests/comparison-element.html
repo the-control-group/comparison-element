@@ -1,17 +1,14 @@
-
 <!doctype html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>comparison-element Demo</title>
-  <script src="../webcomponentsjs/webcomponents.js"></script>
-  <link rel="import" href="comparison-element.html">
+  <title>Tests</title>
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../comparison-element.html">
 </head>
-<body unresolved>
-
-<p>An example of using <code>&lt;comparison-element&gt;</code>:</p>
-
-
+<body>
 <comparison-element chart-data-categories="['01', '02', '03', '04', '05', '06', '07']"
                     chart-data-series="[{'name': 'Realtime Users', 'data': [500, 1000, 3000, 4000, 3000, 2000, 1700]}]"
                     chart-data-selected="[5]"
@@ -46,27 +43,28 @@
     Transposed Content
   </transposed-content>
 </comparison-element>
-
 <script>
-  document.querySelector('comparison-element').addEventListener('menu-click', function(event) {
-    alert('You clicked the menu icon! This fired off a "menu-click" event that you can use to do something with!');
-  });
-  document.querySelector('comparison-element').addEventListener('transpose-action-click', function(event) {
-    alert('You clicked the transpose image! This fired off a "ranspose-action-click" event that you can use to do something with!');
-  });
-  setInterval(function() {
-    var count = Math.floor((Math.random() * 6000) + 1),
-        metrics = document.querySelectorAll('comparison-element-metric'),
-        i;
+  window.addEventListener('polymer-ready', function(e) {
+    var comparisonElement = document.querySelector('comparison-element'),
+        chart = comparisonElement.$.line_chart,
+        mainMetric = comparisonElement.querySelector('comparison-element-main-metric'),
+        metrics = comparisonElement.querySelectorAll('comparison-element-metric');
 
-    document.querySelector('comparison-element-main-metric').setAttribute('stat', count);
-    for (i = 0; i < metrics.length; i++) {
-      metrics[i].setAttribute('compare-to', count);
-    }
-  }, 2000);
-
-  console.dir(document.querySelector('comparison-element'));
+    suite('<comparison-element>', function () {
+      test('initializes', function () {
+        assert(comparisonElement._readied);
+      });
+      test('has chart', function () {
+        assert(chart)
+      });
+      test('has main metric', function() {
+        assert(mainMetric);
+      });
+      test('has metrics', function() {
+        assert.notEqual(metrics.length, 0);
+      });
+    });
+  });
 </script>
-
 </body>
 </html>
