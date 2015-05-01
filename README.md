@@ -10,7 +10,7 @@ element will bring the graph to full-screen wheres comparisons and details are d
 bower install --save tcg-comparison-widget
 ```
 
-## How to user
+## How to use
 ###Include the element in your page
 
 ```
