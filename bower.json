@@ -1,20 +1,21 @@
 {
-  "name": "comparison-element",
+  "name": "tcg-comparison-widget",
   "version": "0.1.0",
   "authors": [
     "Darren Labey <darren.labey@thecontrolgroup.com>"
   ],
-  "description": "Re-usable Polymer 0.5.* comparison element that can be used to display a main metric and compare it agains at least 1 other metric; it is configurable for up to 2 more optional metrics to be compared against.",
+  "description": "Re-usable Polymer 0.5.* comparison widget that can be used to display a main metric and compare it against up to 3 other metrics.",
   "keywords": [
     "web-component",
     "web-components",
     "polymer",
+    "tcg",
     "comparison",
-    "metric"
+    "widget"
   ],
-  "main": "comparison-element.html",
+  "main": "tcg-comparison-widget.html",
   "license": "MIT",
-  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "homepage": "https://github.com/the-control-group/tcg-comparison-widget/",
   "ignore": [
     "/.*",
     "/tests/"

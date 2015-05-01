@@ -9,7 +9,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
 
 ##### Example
 
-    <comparison-element chart-data-categories="['01', '02', '03', '04', '05', '06', '07']"
+    <tcg-comparison-widget chart-data-categories="['01', '02', '03', '04', '05', '06', '07']"
                     chart-data-series="[{'name': 'Realtime Users', 'data': [500, 1000, 3000, 4000, null, null, null]}, {'name': 'Predicted Realtime Users', 'data': [null, null, null, 4000, 3000, 2000, 1700]}]"
                     chart-data-selected="[false, 3000]"
                     chart-data-trendline="2000"
@@ -19,38 +19,38 @@ Element that provides a comparison widget to be used as a card on an admin dashb
                     chart-tooltip-format="0,0"
                     enable-menu-action="true"
                     enable-transpose-action="true">
-    <comparison-element-main-metric
+    <tcg-comparison-widget-main-metric
       label="REALTIME USERS"
       stat="0"
-      ></comparison-element-main-metric>
-    <comparison-element-metric
+      ></tcg-comparison-widget-main-metric>
+    <tcg-comparison-widget-metric
       label="YESTERDAY"
       stat="0"
       compare-to="0"
       format="0,0"
-      ></comparison-element-metric>
-    <comparison-element-metric
+      ></tcg-comparison-widget-metric>
+    <tcg-comparison-widget-metric
       label="LAST WEEK"
       stat="0"
       compare-to="0"
-      ></comparison-element-metric>
-    <comparison-element-metric
+      ></tcg-comparison-widget-metric>
+    <tcg-comparison-widget-metric
       label="LAST MONTH"
       stat="0"
       compare-to="0"
-      ></comparison-element-metric>
+      ></tcg-comparison-widget-metric>
     <transposed-content>
       Transposed Content
     </transposed-content>
-  </comparison-element>
+  </tcg-comparison-widget>
 
-@element comparison-element
+@element tcg-comparison-widget
 @blurb Element that provides a comparison widget to be used as a card on an admin dashboard.
 @status beta
-@homepage https://github.com/the-control-group/comparison-element
+@homepage https://github.com/the-control-group/tcg-comparison-widget
 @see http://api.highcharts.com/highcharts
 -->
-<polymer-element name="comparison-element" attributes="chart-data-categories
+<polymer-element name="tcg-comparison-widget" attributes="chart-data-categories
                                                        chart-data-series
                                                        chart-data-selected
                                                        chart-data-trendline
@@ -64,7 +64,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
                                                        enable-menu-action
                                                        enable-transpose-action">
   <template class="test">
-    <link rel="stylesheet" href="comparison-element.css">
+    <link rel="stylesheet" href="tcg-comparison-widget.css">
     <div id="front">
       <div id="header">
         <div id="chart" class="chart">
@@ -75,10 +75,10 @@ Element that provides a comparison widget to be used as a card on an admin dashb
       </div>
       <div id="body">
         <div id="main-metric">
-          <content id="main-metric-data" select="comparison-element-main-metric"></content>
+          <content id="main-metric-data" select="tcg-comparison-widget-main-metric"></content>
         </div>
         <div id="metrics">
-          <content id="metrics-data" select="comparison-element-metric"></content>
+          <content id="metrics-data" select="tcg-comparison-widget-metric"></content>
         </div>
       </div>
     </div>
@@ -375,25 +375,25 @@ Element that provides a comparison widget to be used as a card on an admin dashb
 </polymer-element>
 
 <!--
-Element that provides a metric config for the comparison-element.
+Element that provides a metric config for the tcg-comparison-widget.
 
 ##### Example
 
-    <comparison-element-metric
+    <tcg-comparison-widget-metric
       label="YESTERDAY"
       stat="0"
       compare-to="0"
       format="0,0"
-      ></comparison-element-metric>
+      ></tcg-comparison-widget-metric>
 
-@element comparison-element-metric
-@blurb Element that provides a metric config for the comparison-element.
+@element tcg-comparison-widget-metric
+@blurb Element that provides a metric config for the tcg-comparison-widget.
 @status beta
-@homepage https://github.com/the-control-group/comparison-element
+@homepage https://github.com/the-control-group/tcg-comparison-widget
 -->
-<polymer-element name="comparison-element-metric" attributes="label stat compare-to format">
+<polymer-element name="tcg-comparison-widget-metric" attributes="label stat compare-to format">
   <template>
-    <link rel="stylesheet" href="comparison-element-metric.css">
+    <link rel="stylesheet" href="tcg-comparison-widget-metric.css">
     <div>
       <div class="label">
         {{label}}
@@ -407,7 +407,7 @@ Element that provides a metric config for the comparison-element.
     </div>
   </template>
   <script>
-    Polymer('comparison-element-metric', {
+    Polymer('tcg-comparison-widget-metric', {
       /**
        * Publish lifecycle object (instantiate, type hint)
        * @property {number} stat
@@ -506,24 +506,24 @@ Element that provides a metric config for the comparison-element.
 </polymer-element>
 
 <!--
-Element that provides a main metric config for the comparison-element.
+Element that provides a main metric config for the tcg-comparison-widget.
 
 ##### Example
 
-    <comparison-element-main-metric
+    <tcg-comparison-widget-main-metric
     label="REALTIME USERS"
     stat="0"
-    ></comparison-element-main-metric>
+    ></tcg-comparison-widget-main-metric>
 
-@element comparison-element-main-metric
-@extends comparison-element-metric
-@blurb Element that provides a main metric config for the comparison-element.
+@element tcg-comparison-widget-main-metric
+@extends tcg-comparison-widget-metric
+@blurb Element that provides a main metric config for the tcg-comparison-widget.
 @status beta
-@homepage https://github.com/the-control-group/comparison-element
+@homepage https://github.com/the-control-group/tcg-comparison-widget
 -->
-<polymer-element name="comparison-element-main-metric" extends="comparison-element-metric">
+<polymer-element name="tcg-comparison-widget-main-metric" extends="tcg-comparison-widget-metric">
   <template>
-    <link rel="stylesheet" href="comparison-element-main-metric.css">
+    <link rel="stylesheet" href="tcg-comparison-widget-main-metric.css">
     <div>
       <div class="label">
         {{label}}

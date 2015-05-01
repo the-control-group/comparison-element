@@ -6,10 +6,10 @@
   <title>Tests</title>
   <script src="../../webcomponentsjs/webcomponents.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
-  <link rel="import" href="../comparison-element.html">
+  <link rel="import" href="../tcg-comparison-widget.html">
 </head>
 <body>
-<comparison-element chart-data-categories="['01', '02', '03', '04', '05', '06', '07']"
+<tcg-comparison-widget chart-data-categories="['01', '02', '03', '04', '05', '06', '07']"
                     chart-data-series="[{'name': 'Realtime Users', 'data': [500, 1000, 3000, 4000, 3000, 2000, 1700]}]"
                     chart-data-selected="[5]"
                     chart-data-trendline="2000"
@@ -19,38 +19,38 @@
                     chart-tooltip-format="0,0"
                     enable-menu-action="true"
                     enable-transpose-action="true">
-  <comparison-element-main-metric
+  <tcg-comparison-widget-main-metric
     label="REALTIME USERS"
     stat="0"
-    ></comparison-element-main-metric>
-  <comparison-element-metric
+    ></tcg-comparison-widget-main-metric>
+  <tcg-comparison-widget-metric
     label="YESTERDAY"
     stat="0"
     compare-to="0"
     format="0,0"
-    ></comparison-element-metric>
-  <comparison-element-metric
+    ></tcg-comparison-widget-metric>
+  <tcg-comparison-widget-metric
     label="LAST WEEK"
     stat="0"
     compare-to="0"
-    ></comparison-element-metric>
-  <comparison-element-metric
+    ></tcg-comparison-widget-metric>
+  <tcg-comparison-widget-metric
     label="LAST MONTH"
     stat="0"
     compare-to="0"
-    ></comparison-element-metric>
+    ></tcg-comparison-widget-metric>
   <transposed-content>
     Transposed Content
   </transposed-content>
-</comparison-element>
+</tcg-comparison-widget>
 <script>
   window.addEventListener('polymer-ready', function(e) {
-    var comparisonElement = document.querySelector('comparison-element'),
+    var comparisonElement = document.querySelector('tcg-comparison-widget'),
         chart = comparisonElement.$.line_chart,
-        mainMetric = comparisonElement.querySelector('comparison-element-main-metric'),
-        metrics = comparisonElement.querySelectorAll('comparison-element-metric');
+        mainMetric = comparisonElement.querySelector('tcg-comparison-widget-main-metric'),
+        metrics = comparisonElement.querySelectorAll('tcg-comparison-widget-metric');
 
-    suite('<comparison-element>', function () {
+    suite('<tcg-comparison-widget>', function () {
       test('initializes', function () {
         assert(comparisonElement._readied);
       });

@@ -3,16 +3,16 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>comparison-element Demo</title>
+  <title>tcg-comparison-widget Demo</title>
   <script src="../webcomponentsjs/webcomponents.js"></script>
-  <link rel="import" href="comparison-element.html">
+  <link rel="import" href="tcg-comparison-widget.html">
 </head>
 <body unresolved>
 
-<p>An example of using <code>&lt;comparison-element&gt;</code>:</p>
+<p>An example of using <code>&lt;tcg-comparison-widget&gt;</code>:</p>
 
 
-<comparison-element chart-data-categories="['01', '02', '03', '04', '05', '06', '07']"
+<tcg-comparison-widget chart-data-categories="['01', '02', '03', '04', '05', '06', '07']"
                     chart-data-series="[{'name': 'Realtime Users', 'data': [500, 1000, 3000, 4000, 3000, 2000, 1700]}]"
                     chart-data-selected="[5]"
                     chart-data-trendline="2000"
@@ -22,50 +22,50 @@
                     chart-tooltip-format="0,0"
                     enable-menu-action="true"
                     enable-transpose-action="true">
-  <comparison-element-main-metric
+  <tcg-comparison-widget-main-metric
     label="REALTIME USERS"
     stat="0"
-    ></comparison-element-main-metric>
-  <comparison-element-metric
+    ></tcg-comparison-widget-main-metric>
+  <tcg-comparison-widget-metric
     label="YESTERDAY"
     stat="0"
     compare-to="0"
     format="0,0"
-    ></comparison-element-metric>
-  <comparison-element-metric
+    ></tcg-comparison-widget-metric>
+  <tcg-comparison-widget-metric
     label="LAST WEEK"
     stat="0"
     compare-to="0"
-    ></comparison-element-metric>
-  <comparison-element-metric
+    ></tcg-comparison-widget-metric>
+  <tcg-comparison-widget-metric
     label="LAST MONTH"
     stat="0"
     compare-to="0"
-    ></comparison-element-metric>
+    ></tcg-comparison-widget-metric>
   <transposed-content>
     Transposed Content
   </transposed-content>
-</comparison-element>
+</tcg-comparison-widget>
 
 <script>
-  document.querySelector('comparison-element').addEventListener('menu-click', function(event) {
+  document.querySelector('tcg-comparison-widget').addEventListener('menu-click', function(event) {
     alert('You clicked the menu icon! This fired off a "menu-click" event that you can use to do something with!');
   });
-  document.querySelector('comparison-element').addEventListener('transpose-action-click', function(event) {
+  document.querySelector('tcg-comparison-widget').addEventListener('transpose-action-click', function(event) {
     alert('You clicked the transpose image! This fired off a "ranspose-action-click" event that you can use to do something with!');
   });
   setInterval(function() {
     var count = Math.floor((Math.random() * 6000) + 1),
-        metrics = document.querySelectorAll('comparison-element-metric'),
+        metrics = document.querySelectorAll('tcg-comparison-widget-metric'),
         i;
 
-    document.querySelector('comparison-element-main-metric').setAttribute('stat', count);
+    document.querySelector('tcg-comparison-widget-main-metric').setAttribute('stat', count);
     for (i = 0; i < metrics.length; i++) {
       metrics[i].setAttribute('compare-to', count);
     }
   }, 2000);
 
-  console.dir(document.querySelector('comparison-element'));
+  console.dir(document.querySelector('tcg-comparison-widget'));
 </script>
 
 </body>

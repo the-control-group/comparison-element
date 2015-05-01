@@ -1,8 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
 
-<polymer-element name="comparison-element-metric" attributes="label stat compare-to format">
+<polymer-element name="tcg-comparison-widget-metric" attributes="label stat compare-to format">
   <template>
-    <link rel="stylesheet" href="comparison-element-metric.css">
+    <link rel="stylesheet" href="tcg-comparison-widget-metric.css">
     <div>
       <div class="label">
         {{label}}
@@ -16,7 +16,7 @@
     </div>
   </template>
   <script>
-    Polymer('comparison-element-metric', {
+    Polymer('tcg-comparison-widget-metric', {
       publish: {
         stat: {
           value: 0,
