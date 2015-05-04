@@ -1,5 +1,6 @@
 <script src="../highcharts/adapters/standalone-framework.js"></script>
 <script src="../highcharts/highcharts.js"></script>
+<script src="../lodash/lodash.js"></script>
 <script src="../numeral-js/min/numeral.min.js"></script>
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../core-icons/core-icons.html">
@@ -141,32 +142,33 @@ Element that provides a comparison widget to be used as a card on an admin dashb
         // Listen for when the element height changes to calculate the height of the direct children of the header
         // and body
         this.calculateWidthsAndHeights.call(this);
+        this.drawChart.call(this);
       },
 
       /**
        * Ready lifecycle method
        */
       ready: function (event, detail, sender) {
-          // Initially calculate header and body heights
-          this.async(this.calculateWidthsAndHeights);
+        // Initially calculate header and body heights
+        this.async(this.calculateWidthsAndHeights);
 
-          // Initially draw the line chart
-          this.async(this.drawChart);
+        // Initially draw the line chart
+        this.async(this.drawChart);
 
-          // Setup menu icon if menu action enabled
-          if (this['enable-menu-action']) {
-            this.$.icon.style.cursor = 'pointer';
-            this.$.icon.style.display = 'block';
-          }
+        // Setup menu icon if menu action enabled
+        if (this['enable-menu-action']) {
+          this.$.icon.style.cursor = 'pointer';
+          this.$.icon.style.display = 'block';
+        }
 
-          // Setup transpose image if transpose action enabled
-          if (this['enable-transpose-action']) {
-            this.$.action.style.cursor = 'pointer';
-            this.$.action.style.display = 'block';
-          }
+        // Setup transpose image if transpose action enabled
+        if (this['enable-transpose-action']) {
+          this.$.action.style.cursor = 'pointer';
+          this.$.action.style.display = 'block';
+        }
 
-          // Element mouseleave event
-          this.addEventListener('mouseleave', this.onElementMouseleave);
+        // Element mouseleave event
+        this.addEventListener('mouseleave', this.onElementMouseleave);
       },
 
       /**
@@ -209,7 +211,6 @@ Element that provides a comparison widget to be used as a card on an admin dashb
           chart: {
             backgroundColor: 'transparent',
               renderTo: this.$.line_chart,
-              //spacing: [5, 25, 15, 5],
               spacing: [5, 20, 5, 5],
               type: 'spline'
           },
@@ -236,10 +237,10 @@ Element that provides a comparison widget to be used as a card on an admin dashb
             }
           },
           xAxis: {
-            categories: this['chart-data-categories'],
+            categories: _.clone(this['chart-data-categories']),
             labels: {
               style: {
-                color: this['chart-x-axis-text-color'],
+                color: _.clone(this['chart-x-axis-text-color']),
                 fontSize: '6px',
                 opacity: .5
               }
@@ -257,7 +258,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
             gridLineWidth: 0,
             labels: {
               style: {
-                color: this['chart-y-axis-text-color'],
+                color: _.clone(this['chart-y-axis-text-color']),
                 fontSize: '8px',
                 opacity: .5
               }
@@ -272,17 +273,17 @@ Element that provides a comparison widget to be used as a card on an admin dashb
 
         // Transform the x axis gridline
         if (this['chart-x-axis-gridline-color']) {
-          config.xAxis.gridLineColor = this['chart-x-axis-gridline-color'];
+          config.xAxis.gridLineColor = _.clone(this['chart-x-axis-gridline-color']);
           config.xAxis.gridLineWidth = 1;
         }
 
         // Transform the series data
         config.series = [];
         for (i = 0; i < this['chart-data-series'].length; i++) {
-          config.series[i] = this['chart-data-series'][i];
+          config.series[i] = _.cloneDeep(this['chart-data-series'][i]);
           config.series[i].lineWidth = 1.5;
-          config.series[i].color = this['chart-line-colors'][i] || (i > 0 ? config.series[--i].color : this['chart-line-colors'][0]);
-          config.series[i].dashStyle = this['chart-line-styles'][i] || 'Solid';
+          config.series[i].color =  _.clone(this['chart-line-colors'][i]) || (i > 0 ? config.series[--i].color : _.clone(this['chart-line-colors'][0]));
+          config.series[i].dashStyle = _.clone(this['chart-line-styles'][i]) || 'Solid';
         }
 
         // Set selected markers
@@ -312,23 +313,23 @@ Element that provides a comparison widget to be used as a card on an admin dashb
         // Transform the trendline
         if (this['chart-data-trendline']) {
           config.yAxis.plotLines = [{
-            color: this['chart-trendline-color'],
+            color: _.clone(this['chart-trendline-color']),
             dashStyle: 'ShortDash',
-            value: this['chart-data-trendline'],
+            value: _.clone(this['chart-data-trendline']),
             width: 1,
             zIndex: 2
           }];
         }
 
-        // Determine if the chart has been initialized
-        if (!this.chart) {
-          // Initiliaze the chart
+        if (this.chart) {
+          // Update the series data
+          for (i = 0; i < config.series.length; i++) {
+            this.chart.series[i].update(config.series[i]);
+          }
+        } else {
+          // Initialzie the chart
           this.chart = new Highcharts.Chart(config);
-          //this.chart = new google.visualization.LineChart(this.$.line_chart);
         }
-
-//        // Draw the chart
-//        this.chart.draw(data, options);
       },
 
       // Events
