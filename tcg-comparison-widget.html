@@ -167,6 +167,9 @@ Element that provides a comparison widget to be used as a card on an admin dashb
           this.$.action.style.display = 'block';
         }
 
+        // Window resize event
+        window.addEventListener('resize', this.onWindowResize.bind(this));
+
         // Element mouseleave event
         this.addEventListener('mouseleave', this.onElementMouseleave);
       },
@@ -342,6 +345,16 @@ Element that provides a comparison widget to be used as a card on an admin dashb
        */
       onMenuIconClick: function(event, detail, sender) {
         this.fire('menu-click');
+      },
+
+      /**
+       * On window resize
+       * @param {object} event
+       */
+      onWindowResize: function(event) {
+        // Resize and redraw
+        this.calculateWidthsAndHeights.call(this);
+        this.drawChart.call(this);
       },
 
       /**
