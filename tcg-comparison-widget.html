@@ -141,20 +141,23 @@ Element that provides a comparison widget to be used as a card on an admin dashb
       attributeChanged: function(attrName, oldVal, newVal) {
         // Listen for when the element height changes to calculate the height of the direct children of the header
         // and body
-        this.calculateWidthsAndHeights.call(this);
-        this.drawChart.call(this);
+        this.async(function() {
+          this.calculateWidthsAndHeights.call(this);
+          this.drawChart.call(this);
+        });
       },
 
       /**
        * Ready lifecycle method
        */
       ready: function (event, detail, sender) {
-        // Initially calculate header and body heights
-        this.async(this.calculateWidthsAndHeights);
 
-        // Initially draw the line chart
-        this.async(this.drawChart);
-
+        this.async(function() {
+          // Initially calculate header and body heights
+          this.calculateWidthsAndHeights.call(this);
+          // Initially draw the line chart
+          this.drawChart.call(this);
+        });
         // Setup menu icon if menu action enabled
         if (this['enable-menu-action']) {
           this.$.icon.style.cursor = 'pointer';
