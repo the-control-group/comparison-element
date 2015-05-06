@@ -216,9 +216,9 @@ Element that provides a comparison widget to be used as a card on an admin dashb
         config = {
           chart: {
             backgroundColor: 'transparent',
-              renderTo: this.$.line_chart,
-              spacing: [5, 20, 5, 5],
-              type: 'spline'
+            renderTo: this.$.line_chart,
+            spacing: [5, 20, 5, 5],
+            type: 'spline'
           },
           credits: {
             enabled: false
@@ -243,8 +243,14 @@ Element that provides a comparison widget to be used as a card on an admin dashb
             }
           },
           xAxis: {
-            categories: _.clone(this['chart-data-categories']),
+            type: 'datetime',
+            dateTimeLabelFormats: {
+              day: '%b %d'
+            },
+            tickInterval: 3600 * 24 * 1000,
             labels: {
+              rotation: 45,
+              step: 1,
               style: {
                 color: _.clone(this['chart-x-axis-text-color']),
                 fontSize: '6px',
@@ -299,7 +305,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
             if ((j + 1) === this['chart-data-selected'][i]) {
               config.series[i].zoneAxis = 'x';
               config.series[i].zones = [{
-                value: j
+                value: config.series[i].data[j][0]
               }, {
                 dashStyle: 'shortDash'
               }];
@@ -310,9 +316,12 @@ Element that provides a comparison widget to be used as a card on an admin dashb
                   lineWidth: 2,
                   lineColor: config.series[i].color
                 },
-                y: config.series[i].data[j]
+                x: config.series[i].data[j][0],
+                y: config.series[i].data[j][1]
               };
             }
+
+            console.log(config.series[i]);
           }
         }
 
