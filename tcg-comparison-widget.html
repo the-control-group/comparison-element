@@ -245,11 +245,12 @@ Element that provides a comparison widget to be used as a card on an admin dashb
           xAxis: {
             type: 'datetime',
             dateTimeLabelFormats: {
-              day: '%b %d'
+              day: '%d',
+              month: '%b %y',
+              year: '%Y'
             },
             tickInterval: 3600 * 24 * 1000,
             labels: {
-              rotation: 45,
               step: 1,
               style: {
                 color: _.clone(this['chart-x-axis-text-color']),
