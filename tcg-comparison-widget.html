@@ -10,16 +10,15 @@ Element that provides a comparison widget to be used as a card on an admin dashb
 
 ##### Example
 
-    <tcg-comparison-widget chart-data-categories="['01', '02', '03', '04', '05', '06', '07']"
-                    chart-data-series="[{'name': 'Realtime Users', 'data': [500, 1000, 3000, 4000, null, null, null]}, {'name': 'Predicted Realtime Users', 'data': [null, null, null, 4000, 3000, 2000, 1700]}]"
-                    chart-data-selected="[false, 3000]"
-                    chart-data-trendline="2000"
-                    chart-line-colors="['#fff', '#acacac']" chart-line-styles="['Solid', 'ShortDash']"
-                    chart-x-axis-gridline-color="rgba(0, 0, 0, .1)" chart-trendline-color="rgba(255, 255, 255, .2)"
-                    chart-x-axis-text-color="#fff" chart-y-axis-text-color="#fff"
-                    chart-tooltip-format="0,0"
-                    enable-menu-action="true"
-                    enable-transpose-action="true">
+    <tcg-comparison-widget chart-data-series="[{'data': [[1422748800000, 500], [1422835200000, 1000], [1422921600000, 3000], [1423008000000, 4000], [1423094400000, 3000], [1423180800000, 2000], [1423267200000, 1700]]}]"
+                       chart-data-selected="[5]"
+                       chart-data-trendline="2000"
+                       chart-line-colors="['#fff', '#acacac']" chart-line-styles="['Solid']"
+                       chart-x-axis-gridline-color="rgba(0, 0, 0, .1)" chart-trendline-color="rgba(255, 255, 255, .2)"
+                       chart-x-axis-text-color="#fff" chart-y-axis-text-color="#fff"
+                       chart-tooltip-format="0,0"
+                       enable-menu-action="true"
+                       enable-transpose-action="true">
     <tcg-comparison-widget-main-metric
       label="REALTIME USERS"
       stat="0"
@@ -51,19 +50,18 @@ Element that provides a comparison widget to be used as a card on an admin dashb
 @homepage https://github.com/the-control-group/tcg-comparison-widget
 @see http://api.highcharts.com/highcharts
 -->
-<polymer-element name="tcg-comparison-widget" attributes="chart-data-categories
-                                                       chart-data-series
-                                                       chart-data-selected
-                                                       chart-data-trendline
-                                                       chart-line-colors
-                                                       chart-line-styles
-                                                       chart-trendline-color
-                                                       chart-x-axis-gridline-color
-                                                       chart-x-axis-text-color
-                                                       chart-y-axis-text-color
-                                                       chart-tooltip-format
-                                                       enable-menu-action
-                                                       enable-transpose-action">
+<polymer-element name="tcg-comparison-widget" attributes="chart-data-series
+                                                          chart-data-selected
+                                                          chart-data-trendline
+                                                          chart-line-colors
+                                                          chart-line-styles
+                                                          chart-trendline-color
+                                                          chart-x-axis-gridline-color
+                                                          chart-x-axis-text-color
+                                                          chart-y-axis-text-color
+                                                          chart-tooltip-format
+                                                          enable-menu-action
+                                                          enable-transpose-action">
   <template class="test">
     <link rel="stylesheet" href="tcg-comparison-widget.css">
     <div id="front">
@@ -92,7 +90,6 @@ Element that provides a comparison widget to be used as a card on an admin dashb
       /**
        * Publish lifecycle object (instantiate, type hint)
        * @property {object} chart
-       * @property {array} chart-data-categories
        * @property {array} chart-data-series
        * @property {array} chart-data-selected
        * @property {number} chart-data-trendline
@@ -108,7 +105,6 @@ Element that provides a comparison widget to be used as a card on an admin dashb
        */
       publish: {
         chart: undefined,
-        'chart-data-categories': [],
         'chart-data-series': {
           value: [],
           reflect: true
@@ -321,8 +317,6 @@ Element that provides a comparison widget to be used as a card on an admin dashb
                 y: config.series[i].data[j][1]
               };
             }
-
-            console.log(config.series[i]);
           }
         }
 
