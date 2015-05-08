@@ -14,6 +14,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
                        chart-data-selected="[5]"
                        chart-data-trendline="2000"
                        chart-line-colors="['#fff', '#acacac']" chart-line-styles="['Solid']"
+                       chart-tick-interval="86400000"
                        chart-x-axis-gridline-color="rgba(0, 0, 0, .1)" chart-trendline-color="rgba(255, 255, 255, .2)"
                        chart-x-axis-text-color="#fff" chart-y-axis-text-color="#fff"
                        chart-tooltip-format="0,0"
@@ -55,6 +56,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
                                                           chart-data-trendline
                                                           chart-line-colors
                                                           chart-line-styles
+                                                          chart-tick-interval
                                                           chart-trendline-color
                                                           chart-x-axis-gridline-color
                                                           chart-x-axis-text-color
@@ -120,6 +122,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
         'chart-line-colors': ['#fff', '#ffd200'],
         'chart-line-styles': ['Solid', 'ShortDash'],
         'chart-trendline-color': 'rgba(255, 255, 255, .2)',
+        'chart-tick-interval': parseInt(86400000),
         'chart-x-axis-gridline-color': 'rgba(0, 0, 0, .1)',
         'chart-x-axis-text-color': '#fff',
         'chart-y-axis-text-color': '#fff',
@@ -246,6 +249,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
               month: '%b %y',
               year: '%Y'
             },
+            tickInterval: this['chart-tick-interval'],
             labels: {
               step: 1,
               style: {
