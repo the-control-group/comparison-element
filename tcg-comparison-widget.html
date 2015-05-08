@@ -123,7 +123,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
         'chart-line-colors': ['#fff', '#ffd200'],
         'chart-line-styles': ['Solid', 'ShortDash'],
         'chart-trendline-color': 'rgba(255, 255, 255, .2)',
-        'chart-tick-interval': parseInt(86400000),
+        'chart-tick-interval': 3600 * 1000 * 24, // day
         'chart-x-axis-gridline-color': 'rgba(0, 0, 0, .1)',
         'chart-x-axis-text-color': '#fff',
         'chart-y-axis-text-color': '#fff',
@@ -151,12 +151,13 @@ Element that provides a comparison widget to be used as a card on an admin dashb
        * Ready lifecycle method
        */
       ready: function (event, detail, sender) {
-
         this.async(function() {
           // Initially calculate header and body heights
           this.calculateWidthsAndHeights.call(this);
-          // Initially draw the line chart
-          this.drawChart.call(this);
+          // Initially draw the line chart if we have data
+          if (this['chart-data-series'].length) {
+            this.drawChart.call(this);
+          }
         });
         // Setup menu icon if menu action enabled
         if (this['enable-menu-action']) {
@@ -181,27 +182,27 @@ Element that provides a comparison widget to be used as a card on an admin dashb
        * Calculate widths and heights method for layout re-rendering
        */
       calculateWidthsAndHeights: function() {
-       var header = this.$.header,
-           lineChart = this.$.line_chart,
-           body = this.$.body,
-           lineChartWidth,
-           lineChartHeight,
-           headerHeight,
-           bodyHeight;
+        var header = this.$.header,
+          lineChart = this.$.line_chart,
+          body = this.$.body,
+          lineChartWidth,
+          lineChartHeight,
+          headerHeight,
+          bodyHeight;
 
-          // Calculate header height (48%)
-          headerHeight = Math.round(.48 * this.clientHeight);
-          header.style.height = headerHeight + 'px';
+        // Calculate header height (48%)
+        headerHeight = Math.round(.48 * this.clientHeight);
+        header.style.height = headerHeight + 'px';
 
-          // Calculate line chart width and height
-          lineChartWidth = header.clientWidth;
-          lineChartHeight = headerHeight;
-          lineChart.style.width = lineChartWidth + 'px';
-          lineChart.style.height = lineChartHeight + 'px';
+        // Calculate line chart width and height
+        lineChartWidth = header.clientWidth;
+        lineChartHeight = headerHeight;
+        lineChart.style.width = lineChartWidth + 'px';
+        lineChart.style.height = lineChartHeight + 'px';
 
-          // Calculate body height (52%)
-          bodyHeight = Math.round(.52 * this.clientHeight);
-          body.style.height = bodyHeight + 'px';
+        // Calculate body height (52%)
+        bodyHeight = Math.round(.52 * this.clientHeight);
+        body.style.height = bodyHeight + 'px';
       },
 
       /**
@@ -209,8 +210,15 @@ Element that provides a comparison widget to be used as a card on an admin dashb
        */
       drawChart: function() {
         var config,
-            i,
-            j;
+          i,
+          j;
+
+        // Use local timezone
+        Highcharts.setOptions({
+          global: {
+            useUTC: false
+          }
+        });
 
         // Generate config data
         config = {
@@ -339,7 +347,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
         if (this.chart) {
           // Update the series data
           for (i = 0; i < config.series.length; i++) {
-            this.chart.series[i] = config.series[i];
+            this.chart.series[i].update(config.series[i]);
           }
         } else {
           // Initialzie the chart
