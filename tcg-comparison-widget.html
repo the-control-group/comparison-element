@@ -241,11 +241,11 @@ Element that provides a comparison widget to be used as a card on an admin dashb
           xAxis: {
             type: 'datetime',
             dateTimeLabelFormats: {
+              hour: '%H',
               day: '%d',
               month: '%b %y',
               year: '%Y'
             },
-            tickInterval: 3600 * 24 * 1000,
             labels: {
               step: 1,
               style: {
@@ -334,7 +334,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
         if (this.chart) {
           // Update the series data
           for (i = 0; i < config.series.length; i++) {
-            this.chart.series[i].update(config.series[i]);
+            this.chart.series[i] = config.series[i];
           }
         } else {
           // Initialzie the chart
