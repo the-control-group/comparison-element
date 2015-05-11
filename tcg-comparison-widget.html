@@ -51,13 +51,15 @@ Element that provides a comparison widget to be used as a card on an admin dashb
 @homepage https://github.com/the-control-group/tcg-comparison-widget
 @see http://api.highcharts.com/highcharts
 -->
-<polymer-element name="tcg-comparison-widget" attributes="chart-data-series
+<polymer-element name="tcg-comparison-widget" attributes="chart-data-type
+                                                          chart-data-series
                                                           chart-data-selected
                                                           chart-data-trendline
                                                           chart-line-colors
                                                           chart-line-styles
                                                           chart-tick-interval
                                                           chart-trendline-color
+                                                          chart-x-axis-ceil
                                                           chart-x-axis-gridline-color
                                                           chart-x-axis-text-color
                                                           chart-y-axis-text-color
@@ -100,6 +102,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
        * @property {array} chart-line-styles
        * @property {integer} chart-tick-interval
        * @property {string} chart-trendline-color
+       * @property {number} chart-x-axis-ceil
        * @property {string} chart-x-axis-gridline-color
        * @property {string} chart-x-axis-text-color
        * @property {string} chart-y-axis-text-color
@@ -126,6 +129,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
         'chart-line-styles': ['Solid', 'ShortDash'],
         'chart-trendline-color': 'rgba(255, 255, 255, .2)',
         'chart-tick-interval': 3600 * 1000 * 24, // day
+        'chart-x-axis-ceil': undefined,
         'chart-x-axis-gridline-color': 'rgba(0, 0, 0, .1)',
         'chart-x-axis-text-color': '#fff',
         'chart-y-axis-text-color': '#fff',
@@ -254,6 +258,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
           },
           xAxis: {
             type: this['chart-data-type'],
+            ceiling: this['chart-x-axis-ceil'] ? parseInt(this['chart-x-axis-ceil']) : undefined,
             dateTimeLabelFormats: {
               minute: '%M',
               hour: '%H',
