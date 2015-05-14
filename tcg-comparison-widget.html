@@ -18,6 +18,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
                        chart-x-axis-gridline-color="rgba(0, 0, 0, .1)" chart-trendline-color="rgba(255, 255, 255, .2)"
                        chart-x-axis-text-color="#fff" chart-y-axis-text-color="#fff"
                        chart-tooltip-format="0,0"
+                       chart-tooltip-text="Something"
                        enable-menu-action="true"
                        enable-transpose-action="true">
     <tcg-comparison-widget-main-metric
@@ -64,6 +65,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
                                                           chart-x-axis-text-color
                                                           chart-y-axis-text-color
                                                           chart-tooltip-format
+                                                          chart-tooltip-text
                                                           enable-menu-action
                                                           enable-transpose-action">
   <template class="test">
@@ -107,6 +109,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
        * @property {string} chart-x-axis-text-color
        * @property {string} chart-y-axis-text-color
        * @property {string} chart-tooltip-format
+       * @property {string} chart-tooltip-text
        * @property {boolean} enable-menu-action
        * @property {boolean} enable-transpose-action
        */
@@ -134,6 +137,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
         'chart-x-axis-text-color': '#fff',
         'chart-y-axis-text-color': '#fff',
         'chart-tooltip-format': '0,0',
+        'chart-tooltip-text': '',
         'enable-menu-action': false,
         'enable-transpose-action': false
       },
@@ -215,7 +219,8 @@ Element that provides a comparison widget to be used as a card on an admin dashb
        * Draw the chart
        */
       drawChart: function() {
-        var config,
+        var self = this,
+          config,
           i,
           j;
 
@@ -253,7 +258,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
           },
           tooltip: {
             formatter: function() {
-              return numeral(this.y).format(this['chart-tooltip-format']);
+              return numeral(this.y).format(self['chart-tooltip-format']) + (self['chart-tooltip-text'] && self['chart-tooltip-text'] != '' ?  ' ' + self['chart-tooltip-text'] : '');
             }
           },
           xAxis: {
