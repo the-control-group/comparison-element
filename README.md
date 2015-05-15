@@ -14,7 +14,7 @@ bower install --save tcg-comparison-widget
 ###Include the element in your page
 
 ```
-<link rel="import" href="/bower_components/comparison-element/comparison-element.html">
+<link rel="import" href="/bower_components/tcg-comparison-element/tcg-comparison-element.html">
 ```
 
 ###Then use the element in your page
