@@ -24,6 +24,10 @@ paper-fab {
   z-index: 2;
 }
 
+#line_chart {
+  height: 125px;
+}
+
 /* #front, #back { */
 /*   backface-visibility: hidden; */
 /*   bottom: 0; */
