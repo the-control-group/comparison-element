@@ -4,6 +4,7 @@
   display: block;
   font-family: 'Roboto', sans-serif;
   background: #fff;
+  min-height: 200px;
 }
 
 :host(.transposed) {
