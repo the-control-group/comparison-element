@@ -1,6 +1,6 @@
 {
   "name": "tcg-comparison-widget",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "authors": [
     "Darren Labey <darren.labey@thecontrolgroup.com>"
   ],
@@ -25,9 +25,14 @@
     "polymer-core-icons": "Polymer/core-icons#~0.5",
     "highcharts": "highslide-software/highcharts-release#~v4.1",
     "lodash": "lodash/lodash#~v3.8",
-    "numeral-js": "adamwdraper/Numeral-js#~1.5"
+    "numeral-js": "adamwdraper/Numeral-js#~1.5",
+    "paper-shadow": "polymer/paper-shadow#~0.5.6",
+    "paper-fab": "polymer/paper-fab#~0.5.6"
   },
   "devDependencies": {
     "web-component-tester": "*"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^0.6.0"
   }
 }

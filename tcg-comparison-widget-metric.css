@@ -1,6 +1,5 @@
 :host {
-  display: table-cell;
-  width: 34%;
+  display: block;
 }
 
 :host > div {
