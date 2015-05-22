@@ -170,17 +170,6 @@ Element that provides a comparison widget to be used as a card on an admin dashb
             this.drawChart.call(this);
           }
         });
-        // Setup menu icon if menu action enabled
-        if (this['enable-menu-action']) {
-          this.$.icon.style.cursor = 'pointer';
-          this.$.icon.style.display = 'block';
-        }
-
-        // Setup transpose image if transpose action enabled
-        if (this['enable-transpose-action']) {
-          this.$.action.style.cursor = 'pointer';
-          this.$.action.style.display = 'block';
-        }
 
         // Window resize event
         window.addEventListener('resize', this.onWindowResize.bind(this));
