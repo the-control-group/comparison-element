@@ -50,8 +50,7 @@ paper-fab {
 .chart {
   background: #0089E3; /* darker blue */
   color: #fff;
-  height: 100%;
-  /* position: relative; */
+  height: 125px;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 }
