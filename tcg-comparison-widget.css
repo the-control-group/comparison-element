@@ -22,7 +22,7 @@ paper-fab {
   position: absolute;
   right: 10px;
   bottom: 110px;
-  z-index: 1;
+  z-index: 0;
 }
 
 #line_chart {
