@@ -5,6 +5,7 @@
   font-family: 'Roboto', sans-serif;
   background: #fff;
   min-height: 200px;
+  min-width: 186px;
   z-index: -1;
 }
 
