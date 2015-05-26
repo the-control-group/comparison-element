@@ -5,6 +5,7 @@
   font-family: 'Roboto', sans-serif;
   background: #fff;
   min-height: 200px;
+  z-index: -1;
 }
 
 :host(.transposed) {
@@ -21,7 +22,7 @@ paper-fab {
   position: absolute;
   right: 10px;
   bottom: 110px;
-  z-index: 2;
+  z-index: 1;
 }
 
 #line_chart {
