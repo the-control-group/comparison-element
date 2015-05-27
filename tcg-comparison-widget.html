@@ -314,25 +314,27 @@ Element that provides a comparison widget to be used as a card on an admin dashb
 
         // Set selected markers
         for (i = 0; i < this['chart-data-selected'].length; i++) {
-          for (j = 0; j < config.series[i].data.length; j++) {
-            // Determine if the index matches (remember, zero indexed)
-            if ((j + 1) === this['chart-data-selected'][i]) {
-              config.series[i].zoneAxis = 'x';
-              config.series[i].zones = [{
-                value: config.series[i].data[j][0]
-              }, {
-                dashStyle: 'shortDash'
-              }];
-              config.series[i].data[j] = {
-                marker: {
-                  enabled: true,
-                  fillColor: 'transparent',
-                  lineWidth: 2,
-                  lineColor: config.series[i].color
-                },
-                x: config.series[i].data[j][0],
-                y: config.series[i].data[j][1]
-              };
+          if('undefined' !== typeof config.series[i]) {
+            for (j = 0; j < config.series[i].data.length; j++) {
+              // Determine if the index matches (remember, zero indexed)
+              if ((j + 1) === this['chart-data-selected'][i]) {
+                config.series[i].zoneAxis = 'x';
+                config.series[i].zones = [{
+                  value: config.series[i].data[j][0]
+                }, {
+                  dashStyle: 'shortDash'
+                }];
+                config.series[i].data[j] = {
+                  marker: {
+                    enabled: true,
+                    fillColor: 'transparent',
+                    lineWidth: 2,
+                    lineColor: config.series[i].color
+                  },
+                  x: config.series[i].data[j][0],
+                  y: config.series[i].data[j][1]
+                };
+              }
             }
           }
         }
