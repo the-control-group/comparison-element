@@ -353,7 +353,9 @@ Element that provides a comparison widget to be used as a card on an admin dashb
         if (this.chart) {
           // Update the series data
           for (i = 0; i < config.series.length; i++) {
-            this.chart.series[i].update(config.series[i]);
+            if('undefined' !== typeof this.chart.series[i]){
+               this.chart.series[i].update(config.series[i]);
+            }
           }
         } else {
           // Initialzie the chart
