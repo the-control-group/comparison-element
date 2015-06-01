@@ -65,7 +65,8 @@ Element that provides a comparison widget to be used as a card on an admin dashb
                                                           chart-tooltip-format
                                                           chart-tooltip-text
                                                           enable-menu-action
-                                                          enable-transpose-action">
+                                                          enable-transpose-action
+                                                          date-time-label-formats">
   <template>
     <link rel="stylesheet" href="tcg-comparison-widget.css">
     <paper-shadow z="1" vertical layout>
@@ -140,7 +141,14 @@ Element that provides a comparison widget to be used as a card on an admin dashb
         'chart-tooltip-format': '0,0',
         'chart-tooltip-text': '',
         'enable-menu-action': false,
-        'enable-transpose-action': { value: true, reflect: true }
+        'enable-transpose-action': { value: true },
+        'date-time-label-formats': {
+          minute: '%M',
+          hour: '%H',
+          day: '%b %d',
+          month: '%b %y',
+          year: '%Y'
+        }
       },
 
       /**
@@ -254,13 +262,7 @@ Element that provides a comparison widget to be used as a card on an admin dashb
           xAxis: {
             type: this['chart-data-type'],
             ceiling: this['chart-x-axis-ceil'] ? parseInt(this['chart-x-axis-ceil']) : undefined,
-            dateTimeLabelFormats: {
-              minute: '%M',
-              hour: '%H',
-              day: '%b %d',
-              month: '%b %y',
-              year: '%Y'
-            },
+            dateTimeLabelFormats: this['date-time-label-formats'],
             tickInterval: this['chart-tick-interval'],
             labels: {
               rotation: 45,
